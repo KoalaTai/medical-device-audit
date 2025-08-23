@@ -5,10 +5,10 @@
 **Mission Statement**: Provide medical device manufacturers with a comprehensive, professional-grade audit readiness assessment that identifies critical compliance gaps and generates actionable deliverables for regulatory audit preparation.
 
 **Success Indicators**:
-- Users can complete a 25-question assessment in 15-20 minutes
+- Users can complete a 40-question assessment covering multiple regulatory frameworks in 20-25 minutes
 - System generates accurate readiness scores with Red/Amber/Green risk classification
-- Professional deliverables (gap analysis, CAPA plan, interview scripts) are exported
-- Clear identification of critical failures that require immediate attention
+- Professional deliverables (gap analysis, CAPA plan, interview scripts) are exported with appropriate regulatory framework references
+- Clear identification of critical failures across ISO 13485, 21 CFR 820, MDR, and ISO 14155 requirements
 
 **Experience Qualities**: Professional, Authoritative, Reliable
 
@@ -22,7 +22,7 @@
 
 **Core Problem Analysis**: Medical device manufacturers need systematic evaluation of their audit readiness with professional outputs to guide preparation activities.
 
-**User Context**: Quality managers, regulatory affairs professionals, and consultants preparing for FDA, Notified Body, or other regulatory audits.
+**User Context**: Quality managers, regulatory affairs professionals, and consultants preparing for FDA, Notified Body, competent authority, or other regulatory audits across global markets including EU, US, and international jurisdictions.
 
 **Critical Path**: Home → Assessment → Results → Export
 
@@ -34,9 +34,9 @@
 ## Essential Features
 
 ### 1. Comprehensive Assessment Questionnaire
-- **What it does**: 25 carefully crafted questions covering ISO 13485 and 21 CFR 820 requirements
-- **Why it matters**: Provides systematic evaluation of critical regulatory compliance areas
-- **Success criteria**: Users can complete assessment smoothly with clear question context
+- **What it does**: 40 carefully crafted questions covering ISO 13485, 21 CFR 820, MDR (Medical Device Regulation), and ISO 14155 (Clinical Investigation) requirements
+- **Why it matters**: Provides systematic evaluation of critical regulatory compliance areas across multiple international frameworks
+- **Success criteria**: Users can complete assessment smoothly with clear question context and regulatory framework identification
 
 ### 2. Intelligent Scoring Engine
 - **What it does**: Calculates weighted readiness score (0-100) with critical failure logic and Red/Amber/Green status
@@ -114,10 +114,10 @@
 
 ## Implementation Considerations
 
-**Scalability Needs**: Modular question/standards mapping for different regulatory frameworks
+**Scalability Needs**: Modular question/standards mapping for different regulatory frameworks - now includes ISO 13485, 21 CFR 820, MDR, and ISO 14155 with expandable architecture for future regulations
 **Testing Focus**: Scoring algorithm accuracy and data persistence reliability
 **Critical Questions**: Ensuring professional credibility while maintaining educational disclaimer
 
 ## Reflection
 
-This approach uniquely combines regulatory expertise with modern web application UX, providing immediate professional value while maintaining appropriate disclaimers. The systematic scoring approach and professional deliverables distinguish this from generic assessment tools, making it specifically valuable for medical device audit preparation.
+This approach uniquely combines regulatory expertise across multiple international frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) with modern web application UX, providing immediate professional value while maintaining appropriate disclaimers. The systematic scoring approach and professional deliverables distinguish this from generic assessment tools, making it specifically valuable for comprehensive medical device audit preparation across global regulatory environments.

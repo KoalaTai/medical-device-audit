@@ -33,14 +33,16 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
               Comprehensive Assessment
             </CardTitle>
             <CardDescription>
-              25 carefully crafted questions covering ISO 13485 and 21 CFR 820 requirements
+              40 carefully crafted questions covering ISO 13485, 21 CFR 820, MDR, and ISO 14155 requirements
             </CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm">
               <li>• Design controls and risk management</li>
               <li>• Process validation and CAPA systems</li>
-              <li>• Post-market surveillance activities</li>
+              <li>• Post-market surveillance and clinical follow-up</li>
+              <li>• MDR compliance and UDI implementation</li>
+              <li>• Clinical investigation protocols (ISO 14155)</li>
               <li>• Documentation and record keeping</li>
             </ul>
           </CardContent>
@@ -71,7 +73,7 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
         <CardHeader>
           <CardTitle>Assessment Process</CardTitle>
           <CardDescription>
-            Complete the evaluation in approximately 15-20 minutes
+            Complete the evaluation in approximately 20-25 minutes
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -82,7 +84,7 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
               </div>
               <h3 className="font-semibold mb-2">Answer Questions</h3>
               <p className="text-sm text-muted-foreground">
-                Respond to 25 regulatory compliance questions based on your current practices
+                Respond to 40 regulatory compliance questions based on your current practices
               </p>
             </div>
             <div className="flex flex-col items-center text-center p-4">
@@ -138,7 +140,9 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
         <div className="mt-4 flex justify-center gap-4">
           <Badge variant="outline">ISO 13485</Badge>
           <Badge variant="outline">21 CFR 820</Badge>
-          <Badge variant="outline">15-20 minutes</Badge>
+          <Badge variant="outline">MDR</Badge>
+          <Badge variant="outline">ISO 14155</Badge>
+          <Badge variant="outline">20-25 minutes</Badge>
         </div>
       </div>
     </div>
