@@ -1,8 +1,7 @@
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, AlertTriangle, FileText, Shield } from '@phosphor-icons/react';
+import { CheckCircle, Warning, FileText, Shield } from '@phosphor-icons/react';
 
 interface HomePageProps {
   onStartAssessment: () => void;
@@ -111,7 +110,7 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
       <Card className="border-warning/50 bg-warning/5 mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-warning-foreground">
-            <AlertTriangle size={24} className="text-warning" />
+            <Warning size={24} className="text-warning" />
             Important Disclaimer
           </CardTitle>
         </CardHeader>

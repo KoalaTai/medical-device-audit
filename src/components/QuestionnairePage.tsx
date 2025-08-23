@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -10,9 +9,9 @@ import { QuestionInput } from './QuestionInput';
 
 interface QuestionnairePageProps {
   responses: AssessmentResponse[];
-  setResponses: (responses: AssessmentResponse[]) => void;
+  setResponses: (updater: (prev: AssessmentResponse[]) => AssessmentResponse[]) => void;
   currentQuestionIndex: number;
-  setCurrentQuestionIndex: (index: number) => void;
+  setCurrentQuestionIndex: (updater: (prev: number) => number) => void;
   onComplete: (responses: AssessmentResponse[]) => void;
 }
 
@@ -30,17 +29,19 @@ export function QuestionnairePage({
   const currentResponse = responses.find(r => r.questionId === currentQuestion.id);
 
   const handleAnswerChange = (answer: string | boolean) => {
-    const newResponses = responses.filter(r => r.questionId !== currentQuestion.id);
-    newResponses.push({
-      questionId: currentQuestion.id,
-      answer
+    setResponses((currentResponses) => {
+      const newResponses = currentResponses.filter(r => r.questionId !== currentQuestion.id);
+      newResponses.push({
+        questionId: currentQuestion.id,
+        answer
+      });
+      return newResponses;
     });
-    setResponses(newResponses);
   };
 
   const handleNext = () => {
     if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex((current) => current + 1);
     } else {
       // Complete assessment
       onComplete(responses);
@@ -49,7 +50,7 @@ export function QuestionnairePage({
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setCurrentQuestionIndex((current) => current - 1);
     }
   };
 
@@ -157,7 +158,7 @@ export function QuestionnairePage({
               return (
                 <button
                   key={q.id}
-                  onClick={() => setCurrentQuestionIndex(index)}
+                  onClick={() => setCurrentQuestionIndex(() => index)}
                   className={`
                     aspect-square rounded-lg border-2 text-xs font-medium transition-all
                     ${isCurrent 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { Toaster } from '@/components/ui/sonner';
 import { HomePage } from './components/HomePage';
@@ -14,20 +14,20 @@ function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useKV<number>('currentQuestionIndex', 0);
 
   const handleStartAssessment = () => {
-    setResponses([]);
-    setCurrentQuestionIndex(0);
-    setCurrentPage('questionnaire');
+    setResponses(() => []);
+    setCurrentQuestionIndex(() => 0);
+    setCurrentPage(() => 'questionnaire');
   };
 
   const handleQuestionnaireComplete = (finalResponses: AssessmentResponse[]) => {
-    setResponses(finalResponses);
-    setCurrentPage('results');
+    setResponses(() => finalResponses);
+    setCurrentPage(() => 'results');
   };
 
   const handleRestartAssessment = () => {
-    setResponses([]);
-    setCurrentQuestionIndex(0);
-    setCurrentPage('home');
+    setResponses(() => []);
+    setCurrentQuestionIndex(() => 0);
+    setCurrentPage(() => 'home');
   };
 
   return (
@@ -37,16 +37,16 @@ function App() {
       )}
       {currentPage === 'questionnaire' && (
         <QuestionnairePage
-          responses={responses}
+          responses={responses || []}
           setResponses={setResponses}
-          currentQuestionIndex={currentQuestionIndex}
+          currentQuestionIndex={currentQuestionIndex || 0}
           setCurrentQuestionIndex={setCurrentQuestionIndex}
           onComplete={handleQuestionnaireComplete}
         />
       )}
       {currentPage === 'results' && (
         <ResultsPage
-          responses={responses}
+          responses={responses || []}
           onRestartAssessment={handleRestartAssessment}
         />
       )}

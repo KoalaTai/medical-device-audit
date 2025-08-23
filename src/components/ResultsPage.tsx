@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -6,11 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { 
   CheckCircle, 
-  AlertTriangle, 
+  Warning, 
   XCircle, 
   FileText, 
   Download,
-  RefreshCw,
+  ArrowClockwise,
   TrendUp,
   ClipboardText,
   Users
@@ -38,7 +38,7 @@ export function ResultsPage({ responses, onRestartAssessment }: ResultsPageProps
       description: 'Immediate action required to address critical gaps'
     },
     amber: {
-      icon: AlertTriangle,
+      icon: Warning,
       color: 'text-warning',
       bgColor: 'bg-warning/10',
       borderColor: 'border-warning/20',
@@ -352,7 +352,7 @@ export function ResultsPage({ responses, onRestartAssessment }: ResultsPageProps
           size="lg" 
           className="flex items-center gap-2"
         >
-          <RefreshCw size={20} />
+          <ArrowClockwise size={20} />
           New Assessment
         </Button>
       </div>
