@@ -46,13 +46,13 @@ export function RiskClassificationSelector({ value, onChange }: RiskClassificati
   };
 
   const handleFdaClassChange = (newClass: string) => {
-    const fdaClass = newClass as 'Class I' | 'Class II' | 'Class III' | undefined;
+    const fdaClass = newClass === 'none' ? undefined : (newClass as 'Class I' | 'Class II' | 'Class III');
     setFdaClass(fdaClass);
     updateClassification({ fdaClass });
   };
 
   const handleEuClassChange = (newClass: string) => {
-    const euClass = newClass as 'Class I' | 'Class IIa' | 'Class IIb' | 'Class III' | undefined;
+    const euClass = newClass === 'none' ? undefined : (newClass as 'Class I' | 'Class IIa' | 'Class IIb' | 'Class III');
     setEuClass(euClass);
     updateClassification({ euClass });
   };
@@ -114,12 +114,12 @@ export function RiskClassificationSelector({ value, onChange }: RiskClassificati
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="fda-class">FDA Classification (US)</Label>
-              <Select value={fdaClass || ''} onValueChange={handleFdaClassChange}>
+              <Select value={fdaClass || 'none'} onValueChange={handleFdaClassChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select FDA class" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Not applicable</SelectItem>
+                  <SelectItem value="none">Not applicable</SelectItem>
                   <SelectItem value="Class I">Class I - Low Risk</SelectItem>
                   <SelectItem value="Class II">Class II - Moderate Risk</SelectItem>
                   <SelectItem value="Class III">Class III - High Risk</SelectItem>
@@ -129,12 +129,12 @@ export function RiskClassificationSelector({ value, onChange }: RiskClassificati
 
             <div className="space-y-2">
               <Label htmlFor="eu-class">EU Classification (MDR)</Label>
-              <Select value={euClass || ''} onValueChange={handleEuClassChange}>
+              <Select value={euClass || 'none'} onValueChange={handleEuClassChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select EU class" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Not applicable</SelectItem>
+                  <SelectItem value="none">Not applicable</SelectItem>
                   <SelectItem value="Class I">Class I - Low Risk</SelectItem>
                   <SelectItem value="Class IIa">Class IIa - Low-Medium Risk</SelectItem>
                   <SelectItem value="Class IIb">Class IIb - Medium-High Risk</SelectItem>
