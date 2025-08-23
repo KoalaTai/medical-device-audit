@@ -1,4 +1,4 @@
-import { Question, StandardsMap, RegulatoryFramework, DeviceRiskClass, RiskClassification } from './types';
+import { Question, StandardsMap, RegulatoryFramework, DeviceRiskClass, RiskClassification, DeviceCategory } from './types';
 
 export const questionnaire: Question[] = [
   {
@@ -15,6 +15,11 @@ export const questionnaire: Question[] = [
       'Class III': 1.5,
       'Class IIa': 0.9,
       'Class IIb': 1.2
+    },
+    categoryMultipliers: {
+      'surgical': 1.2,
+      'diagnostic': 1.0,
+      'therapeutic': 1.1
     }
   },
   {
@@ -219,7 +224,12 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'ISO.11135',
     options: ['Complete validation with full documentation', 'Partial validation studies', 'Rely on third-party validation', 'No validation conducted', 'Not applicable - non-sterile products'],
-    frameworks: ['ISO_13485']
+    frameworks: ['ISO_13485'],
+    categoryMultipliers: {
+      'surgical': 1.5,
+      'diagnostic': 0.8,
+      'therapeutic': 1.2
+    }
   },
   {
     id: 'Q19',
@@ -227,7 +237,12 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 3,
     clauseRef: 'ISO.7.1.5',
-    frameworks: ['ISO_13485']
+    frameworks: ['ISO_13485'],
+    categoryMultipliers: {
+      'surgical': 1.0,
+      'diagnostic': 1.5,
+      'therapeutic': 1.1
+    }
   },
   {
     id: 'Q20',
@@ -329,6 +344,11 @@ export const questionnaire: Question[] = [
       'Class III': 1.8,
       'Class IIa': 0.8,
       'Class IIb': 1.4
+    },
+    categoryMultipliers: {
+      'surgical': 1.1,
+      'diagnostic': 0.9,
+      'therapeutic': 1.4
     }
   },
   {
@@ -819,7 +839,8 @@ export function determineRiskClassification(
   isSterile: boolean = false,
   isMeasuring: boolean = false,
   hasActiveComponents: boolean = false,
-  isDrugDevice: boolean = false
+  isDrugDevice: boolean = false,
+  deviceCategory?: DeviceCategory
 ): RiskClassification {
   let riskLevel: 'Low' | 'Medium' | 'High' | 'Very High';
   
@@ -841,6 +862,7 @@ export function determineRiskClassification(
     isMeasuring,
     hasActiveComponents,
     isDrugDevice,
+    deviceCategory,
     riskLevel
   };
 }
@@ -852,42 +874,49 @@ export function getRiskAdjustedWeight(
   question: Question, 
   riskClassification?: RiskClassification
 ): number {
-  if (!riskClassification || !question.riskMultipliers) {
-    return question.weight;
+  let baseWeight = question.weight;
+  
+  // Apply risk class multipliers if available
+  if (riskClassification && question.riskMultipliers) {
+    // Determine which risk class to use for multiplier
+    let deviceClass: DeviceRiskClass | undefined;
+    
+    if (riskClassification.fdaClass) {
+      deviceClass = riskClassification.fdaClass;
+    } else if (riskClassification.euClass) {
+      deviceClass = riskClassification.euClass;
+    }
+    
+    if (deviceClass && question.riskMultipliers[deviceClass]) {
+      baseWeight *= question.riskMultipliers[deviceClass];
+    }
   }
   
-  // Determine which risk class to use for multiplier
-  let deviceClass: DeviceRiskClass | undefined;
-  
-  if (riskClassification.fdaClass) {
-    deviceClass = riskClassification.fdaClass;
-  } else if (riskClassification.euClass) {
-    deviceClass = riskClassification.euClass;
+  // Apply device category multipliers if available
+  if (riskClassification?.deviceCategory && question.categoryMultipliers) {
+    const categoryMultiplier = question.categoryMultipliers[riskClassification.deviceCategory];
+    if (categoryMultiplier) {
+      baseWeight *= categoryMultiplier;
+    }
   }
-  
-  if (!deviceClass || !question.riskMultipliers[deviceClass]) {
-    return question.weight;
-  }
-  
-  const baseMultiplier = question.riskMultipliers[deviceClass];
   
   // Additional multipliers based on device characteristics
-  let adjustedMultiplier = baseMultiplier;
-  
-  if (riskClassification.isSterile && question.clauseRef === 'ISO.11135') {
-    adjustedMultiplier *= 1.2;
+  if (riskClassification) {
+    if (riskClassification.isSterile && question.clauseRef === 'ISO.11135') {
+      baseWeight *= 1.2;
+    }
+    
+    if (riskClassification.hasActiveComponents && 
+        (question.clauseRef === 'IEC.62304' || question.clauseRef === 'IEC.62366')) {
+      baseWeight *= 1.3;
+    }
+    
+    if (riskClassification.isDrugDevice && question.critical) {
+      baseWeight *= 1.1;
+    }
   }
   
-  if (riskClassification.hasActiveComponents && 
-      (question.clauseRef === 'IEC.62304' || question.clauseRef === 'IEC.62366')) {
-    adjustedMultiplier *= 1.3;
-  }
-  
-  if (riskClassification.isDrugDevice && question.critical) {
-    adjustedMultiplier *= 1.1;
-  }
-  
-  return Math.round(question.weight * adjustedMultiplier * 10) / 10;
+  return Math.round(baseWeight * 10) / 10;
 }
 
 /**
@@ -941,6 +970,33 @@ export function getRiskSpecificRecommendations(
   
   if (riskClassification.isDrugDevice) {
     recommendations.push('Coordinate with drug regulatory requirements and combination product guidance');
+  }
+  
+  // Device category specific recommendations
+  if (riskClassification.deviceCategory) {
+    switch (riskClassification.deviceCategory) {
+      case 'surgical':
+        recommendations.push(
+          'Focus on sterility assurance and biocompatibility testing',
+          'Ensure comprehensive user training and human factors validation',
+          'Implement robust packaging and labeling controls'
+        );
+        break;
+      case 'diagnostic':
+        recommendations.push(
+          'Establish analytical performance and clinical validation',
+          'Implement stringent quality control and calibration procedures',
+          'Ensure proper sample handling and processing controls'
+        );
+        break;
+      case 'therapeutic':
+        recommendations.push(
+          'Conduct thorough clinical evidence development',
+          'Implement comprehensive risk-benefit analysis',
+          'Establish robust post-market clinical follow-up'
+        );
+        break;
+    }
   }
   
   return recommendations;
