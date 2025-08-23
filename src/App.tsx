@@ -83,9 +83,9 @@ function App() {
           filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
         />
       )}
-      {currentPage === 'checklist' && filterOptions?.riskClassification?.deviceCategory && (
+      {currentPage === 'checklist' && filterOptions?.riskClassification && (
         <AuditChecklist
-          deviceCategory={filterOptions.riskClassification.deviceCategory}
+          deviceCategory={filterOptions.riskClassification.deviceCategory || 'diagnostic'}
           riskClass={filterOptions.riskClassification.fdaClass || filterOptions.riskClassification.euClass || 'Class II'}
           frameworks={filterOptions.selectedFrameworks || ['ISO_13485', 'CFR_820']}
           onBack={handleBackToResults}

@@ -40,18 +40,22 @@ export function calculateTeamScore(
 
     individualScores[member.id] = calculateScore(
       memberResponses,
-      questions,
-      frameworks,
-      riskClassification
+      {
+        selectedFrameworks: frameworks,
+        includeAllFrameworks: false,
+        riskClassification
+      }
     );
   });
 
   // Calculate base team score using consensus responses
   const baseScore = calculateScore(
     assessmentResponses,
-    questions,
-    frameworks,
-    riskClassification
+    {
+      selectedFrameworks: frameworks,
+      includeAllFrameworks: false,
+      riskClassification
+    }
   );
 
   // Calculate consensus metrics

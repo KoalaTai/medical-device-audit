@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TeamSession, TeamMember, TeamResponse, VotingRound } from '@/lib/types';
-import { MessageCircle, Vote, CheckCircle, Clock, Users, ArrowRight, AlertTriangle } from '@phosphor-icons/react';
+import { MessageCircle, Check, CheckCircle, Clock, Users, ArrowRight, AlertTriangle } from '@phosphor-icons/react';
 import { getFilteredQuestions } from '@/lib/data';
 import { toast } from 'sonner';
 
@@ -338,7 +338,7 @@ export function TeamDiscussion({ session, currentMember, onPhaseComplete }: Team
                 <div className="space-y-4">
                   <div className="bg-muted rounded-lg p-4">
                     <h4 className="font-medium mb-2 flex items-center gap-2">
-                      <Vote className="w-4 h-4" />
+                      <Check className="w-4 h-4" />
                       Cast Your Vote
                     </h4>
                     <p className="text-sm text-muted-foreground mb-4">
