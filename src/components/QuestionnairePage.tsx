@@ -159,7 +159,7 @@ export function QuestionnairePage({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-5 gap-2">
-            {questionnaire.map((q, index) => {
+            {filteredQuestions.map((q, index) => {
               const isAnswered = responses.some(r => r.questionId === q.id);
               const isCurrent = index === currentQuestionIndex;
               
