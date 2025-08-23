@@ -14,7 +14,8 @@ import {
   TrendUp,
   ClipboardText,
   Users,
-  Calculator
+  Calculator,
+  CheckSquare
 } from '@phosphor-icons/react';
 import { AssessmentResponse, FilterOptions } from '../lib/types';
 import { calculateScore } from '../lib/scoring';
@@ -27,9 +28,10 @@ interface ResultsPageProps {
   responses: AssessmentResponse[];
   onRestartAssessment: () => void;
   filterOptions: FilterOptions;
+  onShowAuditChecklist?: () => void;
 }
 
-export function ResultsPage({ responses, onRestartAssessment, filterOptions }: ResultsPageProps) {
+export function ResultsPage({ responses, onRestartAssessment, filterOptions, onShowAuditChecklist }: ResultsPageProps) {
   const scoreResult = useMemo(() => calculateScore(responses, filterOptions), [responses, filterOptions]);
   const assessmentQuestions = useMemo(() => {
     return filterOptions 
@@ -402,6 +404,17 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
           <Download size={20} />
           Export Assessment Package
         </Button>
+        {onShowAuditChecklist && filterOptions.riskClassification && (
+          <Button 
+            onClick={onShowAuditChecklist} 
+            size="lg" 
+            variant="secondary"
+            className="flex items-center gap-2"
+          >
+            <CheckSquare size={20} />
+            View Audit Checklist
+          </Button>
+        )}
         <Button 
           variant="outline" 
           onClick={onRestartAssessment} 

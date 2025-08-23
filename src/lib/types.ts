@@ -122,3 +122,49 @@ export interface FilterOptions {
   includeAllFrameworks: boolean;
   riskClassification?: RiskClassification;
 }
+
+export interface ChecklistItem {
+  id: string;
+  title: string;
+  description: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  category: string;
+  frameworks: RegulatoryFramework[];
+  deviceCategories: DeviceCategory[];
+  riskClasses: DeviceRiskClass[];
+  estimatedHours: number;
+  dependencies?: string[];
+  evidenceTypes: string[];
+  commonPitfalls?: string[];
+  tips?: string[];
+}
+
+export interface PreparationGuide {
+  id: string;
+  title: string;
+  description: string;
+  category: DeviceCategory;
+  frameworks: RegulatoryFramework[];
+  riskClass: DeviceRiskClass;
+  sections: GuideSection[];
+  totalEstimatedHours: number;
+  keyMilestones: Milestone[];
+}
+
+export interface GuideSection {
+  id: string;
+  title: string;
+  description: string;
+  items: ChecklistItem[];
+  estimatedHours: number;
+  order: number;
+}
+
+export interface Milestone {
+  id: string;
+  title: string;
+  description: string;
+  daysFromStart: number;
+  deliverables: string[];
+  criticalPath: boolean;
+}

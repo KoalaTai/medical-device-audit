@@ -4,9 +4,10 @@ import { Toaster } from '@/components/ui/sonner';
 import { HomePage } from './components/HomePage';
 import { QuestionnairePage } from './components/QuestionnairePage';
 import { ResultsPage } from './components/ResultsPage';
+import { AuditChecklist } from './components/AuditChecklist';
 import { AssessmentResponse, FilterOptions } from './lib/types';
 
-type AppState = 'home' | 'questionnaire' | 'results';
+type AppState = 'home' | 'questionnaire' | 'results' | 'checklist';
 
 function App() {
   const [currentPage, setCurrentPage] = useKV<AppState>('currentPage', 'home');
@@ -26,6 +27,10 @@ function App() {
 
   const handleQuestionnaireComplete = (finalResponses: AssessmentResponse[]) => {
     setResponses(() => finalResponses);
+    setCurrentPage(() => 'results');
+  };
+
+  const handleBackToResults = () => {
     setCurrentPage(() => 'results');
   };
 
@@ -58,7 +63,16 @@ function App() {
         <ResultsPage
           responses={responses || []}
           onRestartAssessment={handleRestartAssessment}
+          onShowAuditChecklist={handleShowAuditChecklist}
           filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
+        />
+      )}
+      {currentPage === 'checklist' && filterOptions?.riskClassification && (
+        <AuditChecklist
+          deviceCategory={filterOptions.riskClassification.deviceCategory || 'diagnostic'}
+          riskClass={filterOptions.riskClassification.fdaClass || filterOptions.riskClassification.euClass || 'Class II'}
+          frameworks={filterOptions.selectedFrameworks || ['ISO_13485', 'CFR_820']}
+          onBack={handleBackToResults}
         />
       )}
       <Toaster />

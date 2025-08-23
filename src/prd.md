@@ -58,10 +58,15 @@
 - **Why it matters**: Higher risk devices have proportionally greater regulatory burden and compliance requirements - scoring should reflect this reality
 - **Success criteria**: Risk classification multipliers appropriately adjust question weights and scoring thresholds based on device classification
 
-### 6. Regulatory Framework Filtering
-- **What it does**: Allows users to select specific regulatory frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) to focus their assessment
+### 6. Category-Specific Audit Checklists and Preparation Guides
+- **What it does**: Provides targeted audit preparation checklists for different device categories (surgical, diagnostic, therapeutic) and risk classes with estimated time requirements, common pitfalls, and actionable tips
+- **Why it matters**: Each device category has unique regulatory requirements and audit focus areas - generic preparation is insufficient for thorough audit readiness
+- **Success criteria**: Checklists filter appropriately by device category and risk class, provide realistic time estimates, include framework-specific guidance, and track completion progress
+
+### 7. Regulatory Framework Filtering
+- **What it does**: Allows users to select specific regulatory frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) to focus their assessment and preparation activities
 - **Why it matters**: Enables targeted compliance evaluation for specific markets, reducing assessment time and increasing relevance
-- **Success criteria**: Questions filter accurately based on framework selection, scores reflect only relevant requirements, exports include framework context
+- **Success criteria**: Questions filter accurately based on framework selection, scores reflect only relevant requirements, exports include framework context, checklists show applicable regulatory requirements
 
 ## Design Direction
 
@@ -124,10 +129,23 @@
 
 ## Implementation Considerations
 
-**Scalability Needs**: Modular question/standards mapping for different regulatory frameworks - now includes ISO 13485, 21 CFR 820, MDR, and ISO 14155 with expandable architecture for future regulations
-**Testing Focus**: Scoring algorithm accuracy and data persistence reliability
-**Critical Questions**: Ensuring professional credibility while maintaining educational disclaimer
+**Scalability Needs**: 
+- Modular question/standards mapping for different regulatory frameworks - now includes ISO 13485, 21 CFR 820, MDR, and ISO 14155 with expandable architecture for future regulations
+- Expandable checklist system that can accommodate new device categories and risk classifications
+- Preparation guide framework that scales to different regulatory environments and audit types
+
+**Testing Focus**: 
+- Scoring algorithm accuracy and data persistence reliability
+- Checklist filtering accuracy across device categories and risk classes
+- Progress tracking functionality for checklist completion
+
+**Critical Questions**: 
+- Ensuring professional credibility while maintaining educational disclaimer
+- Balancing comprehensive checklist coverage with practical time constraints
+- Maintaining regulatory accuracy across multiple international frameworks
 
 ## Reflection
 
 This approach uniquely combines regulatory expertise across multiple international frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) with modern web application UX, providing immediate professional value while maintaining appropriate disclaimers. The systematic scoring approach and professional deliverables distinguish this from generic assessment tools, making it specifically valuable for comprehensive medical device audit preparation across global regulatory environments.
+
+The addition of category-specific audit checklists and preparation guides transforms this from a simple assessment tool into a comprehensive audit preparation platform. By providing targeted, actionable checklists with time estimates and common pitfalls, the system guides users through structured preparation activities that are tailored to their specific device type and regulatory requirements. The integration between assessment results and preparation activities creates a seamless workflow from evaluation to execution.
