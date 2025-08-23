@@ -665,6 +665,24 @@ export const standardsMap: StandardsMap = {
     title: 'Clinical Data Management',
     riskWeight: 4,
     framework: 'ISO_14155'
+  },
+  // Additional commonly referenced standards
+  'IEC.62366': {
+    title: 'Usability Engineering',
+    riskWeight: 3,
+    framework: 'ISO_13485'
+  },
+  'IEC.62304': {
+    title: 'Medical Device Software',
+    riskWeight: 4,
+    critical: true,
+    framework: 'ISO_13485'
+  },
+  'ISO.11135': {
+    title: 'Sterilization of Medical Devices',
+    riskWeight: 4,
+    critical: true,
+    framework: 'ISO_13485'
   }
 };
 
@@ -775,6 +793,24 @@ export const evidenceExamples: Record<string, string[]> = {
     'Essential Documents Checklist',
     'Investigator Site Files',
     'Regulatory Submissions'
+  ],
+  'IEC.62366': [
+    'Usability Engineering File',
+    'Use Error Risk Analysis',
+    'User Interface Evaluation',
+    'Human Factors Validation Reports'
+  ],
+  'IEC.62304': [
+    'Software Lifecycle Processes',
+    'Software Requirements Analysis',
+    'Software Architecture Design',
+    'Software Risk Management File'
+  ],
+  'ISO.11135': [
+    'Sterilization Process Validation',
+    'Biocompatibility Test Reports',
+    'Sterilization Process Specifications',
+    'Package Integrity Test Results'
   ]
 };
 
@@ -887,15 +923,18 @@ export function getRiskAdjustedWeight(
       deviceClass = riskClassification.euClass;
     }
     
-    if (deviceClass && question.riskMultipliers[deviceClass]) {
-      baseWeight *= question.riskMultipliers[deviceClass];
+    if (deviceClass && question.riskMultipliers[deviceClass] !== undefined) {
+      const multiplier = question.riskMultipliers[deviceClass];
+      if (multiplier && !isNaN(multiplier)) {
+        baseWeight *= multiplier;
+      }
     }
   }
   
   // Apply device category multipliers if available
   if (riskClassification?.deviceCategory && question.categoryMultipliers) {
     const categoryMultiplier = question.categoryMultipliers[riskClassification.deviceCategory];
-    if (categoryMultiplier) {
+    if (categoryMultiplier && !isNaN(categoryMultiplier)) {
       baseWeight *= categoryMultiplier;
     }
   }
@@ -916,7 +955,7 @@ export function getRiskAdjustedWeight(
     }
   }
   
-  return Math.round(baseWeight * 10) / 10;
+  return Math.max(0.1, Math.round(baseWeight * 10) / 10); // Ensure minimum positive weight
 }
 
 /**

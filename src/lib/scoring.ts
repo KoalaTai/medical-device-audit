@@ -16,10 +16,34 @@ import { getFilteredQuestions, standardsMap, evidenceExamples, frameworkLabels, 
  * Enhanced scoring engine with sophisticated weighted calculations and risk assessment
  */
 export function calculateScore(responses: AssessmentResponse[], filterOptions?: FilterOptions): ScoreResult {
-  // Get the filtered questions that were used for this assessment
-  const assessmentQuestions = filterOptions 
-    ? getFilteredQuestions(filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks)
-    : getFilteredQuestions([], true);
+  try {
+    // Get the filtered questions that were used for this assessment
+    const assessmentQuestions = filterOptions 
+      ? getFilteredQuestions(filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks)
+      : getFilteredQuestions([], true);
+    
+    if (assessmentQuestions.length === 0) {
+      // Return a default score if no questions are available
+      return {
+        score: 0,
+        status: 'red',
+        gaps: [],
+        criticalFailures: [],
+        weightedBreakdown: {
+          totalPossibleWeight: 0,
+          actualWeightedScore: 0,
+          weightingFactors: [],
+          criticalImpact: 0
+        },
+        riskAssessment: {
+          overallRisk: 'critical',
+          riskFactors: [],
+          mitigationPriority: [],
+          complianceMaturity: 'basic'
+        },
+        frameworkScores: {}
+      };
+    }
   
   let totalWeightedScore = 0;
   let totalWeight = 0;
@@ -87,6 +111,9 @@ export function calculateScore(responses: AssessmentResponse[], filterOptions?: 
     if (clauseInfo?.riskWeight) {
       adjustedWeight = adjustedWeight * (clauseInfo.riskWeight / 5);
     }
+    
+    // Ensure adjustedWeight is valid
+    adjustedWeight = isNaN(adjustedWeight) || adjustedWeight <= 0 ? question.weight : adjustedWeight;
 
     const weightedContribution = questionScore * adjustedWeight;
     totalWeightedScore += weightedContribution;
@@ -156,6 +183,29 @@ export function calculateScore(responses: AssessmentResponse[], filterOptions?: 
     riskAssessment,
     frameworkScores
   };
+  } catch (error) {
+    console.error('Error in calculateScore:', error);
+    // Return a safe fallback result
+    return {
+      score: 0,
+      status: 'red',
+      gaps: [],
+      criticalFailures: [],
+      weightedBreakdown: {
+        totalPossibleWeight: 0,
+        actualWeightedScore: 0,
+        weightingFactors: [],
+        criticalImpact: 0
+      },
+      riskAssessment: {
+        overallRisk: 'critical',
+        riskFactors: [],
+        mitigationPriority: [],
+        complianceMaturity: 'basic'
+      },
+      frameworkScores: {}
+    };
+  }
 }
 
 /**

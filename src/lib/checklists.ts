@@ -273,17 +273,26 @@ export const preparationGuides: PreparationGuide[] = [
 ];
 
 // Helper functions to filter checklists based on device characteristics
-export const getFilteredChecklists = (
+export function getFilteredChecklists(
   deviceCategory: DeviceCategory,
   riskClass: DeviceRiskClass,
   frameworks: RegulatoryFramework[]
-): ChecklistItem[] => {
-  return checklistItems.filter(item =>
-    item.deviceCategories.includes(deviceCategory) &&
-    item.riskClasses.includes(riskClass) &&
-    frameworks.some(framework => item.frameworks.includes(framework))
-  );
-};
+): ChecklistItem[] {
+  try {
+    if (!deviceCategory || !riskClass || !frameworks || frameworks.length === 0) {
+      return [];
+    }
+    
+    return checklistItems.filter(item =>
+      item.deviceCategories.includes(deviceCategory) &&
+      item.riskClasses.includes(riskClass) &&
+      frameworks.some(framework => item.frameworks.includes(framework))
+    );
+  } catch (error) {
+    console.error('Error filtering checklists:', error);
+    return [];
+  }
+}
 
 export const getPreparationGuide = (
   deviceCategory: DeviceCategory,
@@ -294,11 +303,20 @@ export const getPreparationGuide = (
   );
 };
 
-export const getChecklistsByPriority = (checklists: ChecklistItem[]) => {
-  return {
-    critical: checklists.filter(item => item.priority === 'critical'),
-    high: checklists.filter(item => item.priority === 'high'),
-    medium: checklists.filter(item => item.priority === 'medium'),
-    low: checklists.filter(item => item.priority === 'low')
-  };
-};
+export function getChecklistsByPriority(checklists: ChecklistItem[]) {
+  try {
+    if (!checklists || !Array.isArray(checklists)) {
+      return { critical: [], high: [], medium: [], low: [] };
+    }
+    
+    return {
+      critical: checklists.filter(item => item.priority === 'critical'),
+      high: checklists.filter(item => item.priority === 'high'),
+      medium: checklists.filter(item => item.priority === 'medium'),
+      low: checklists.filter(item => item.priority === 'low')
+    };
+  } catch (error) {
+    console.error('Error categorizing checklists:', error);
+    return { critical: [], high: [], medium: [], low: [] };
+  }
+}

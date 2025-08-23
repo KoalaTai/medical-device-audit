@@ -41,9 +41,9 @@ export const AuditChecklist: React.FC<AuditChecklistProps> = ({
   const [activeTab, setActiveTab] = useState('checklist');
   const [expandedSections, setExpandedSections] = useState<string[]>(['critical']);
 
-  const checklists = getFilteredChecklists(deviceCategory, riskClass, frameworks);
+  const checklists = getFilteredChecklists(deviceCategory, riskClass, frameworks) || [];
   const preparationGuide = getPreparationGuide(deviceCategory, riskClass);
-  const categorizedChecklists = getChecklistsByPriority(checklists);
+  const categorizedChecklists = getChecklistsByPriority(checklists) || {};
 
   const totalItems = checklists.length;
   const completedCount = (completedItems || []).length;

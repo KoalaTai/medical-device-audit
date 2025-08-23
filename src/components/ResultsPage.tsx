@@ -186,9 +186,9 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions, onS
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Weighted Performance</span>
-                  <span>{((scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100).toFixed(1)}%</span>
+                  <span>{scoreResult.weightedBreakdown.totalPossibleWeight > 0 ? ((scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100).toFixed(1) : 0}%</span>
                 </div>
-                <Progress value={(scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100} className="h-1" />
+                <Progress value={scoreResult.weightedBreakdown.totalPossibleWeight > 0 ? (scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100 : 0} className="h-1" />
               </div>
             </CardContent>
           </Card>

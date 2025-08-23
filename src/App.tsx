@@ -83,9 +83,9 @@ function App() {
           filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
         />
       )}
-      {currentPage === 'checklist' && filterOptions?.riskClassification && (
+      {currentPage === 'checklist' && filterOptions?.riskClassification?.deviceCategory && (
         <AuditChecklist
-          deviceCategory={filterOptions.riskClassification.deviceCategory || 'diagnostic'}
+          deviceCategory={filterOptions.riskClassification.deviceCategory}
           riskClass={filterOptions.riskClassification.fdaClass || filterOptions.riskClassification.euClass || 'Class II'}
           frameworks={filterOptions.selectedFrameworks || ['ISO_13485', 'CFR_820']}
           onBack={handleBackToResults}
@@ -98,7 +98,7 @@ function App() {
           onBack={handleBackToResults}
         />
       )}
-      {currentPage === 'team_training' && (
+      {currentPage === 'team_training' && filterOptions && (
         <TeamTrainingPage
           filterOptions={filterOptions}
           onBack={handleBackToResults}
