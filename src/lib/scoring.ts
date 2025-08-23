@@ -10,7 +10,7 @@ import {
   FrameworkScore,
   RegulatoryFramework 
 } from './types';
-import { getFilteredQuestions, standardsMap, evidenceExamples, frameworkLabels } from './data';
+import { getFilteredQuestions, standardsMap, evidenceExamples, frameworkLabels, getRiskAdjustedWeight } from './data';
 
 /**
  * Enhanced scoring engine with sophisticated weighted calculations and risk assessment
@@ -80,10 +80,12 @@ export function calculateScore(responses: AssessmentResponse[], filterOptions?: 
       criticalFailures.push(question.id);
     }
 
-    // Apply dynamic weighting based on regulatory framework importance
-    let adjustedWeight = question.weight;
+    // Apply risk-adjusted weighting based on device classification
+    let adjustedWeight = getRiskAdjustedWeight(question, filterOptions?.riskClassification);
+    
+    // Apply additional dynamic weighting based on regulatory framework importance
     if (clauseInfo?.riskWeight) {
-      adjustedWeight = question.weight * (clauseInfo.riskWeight / 5);
+      adjustedWeight = adjustedWeight * (clauseInfo.riskWeight / 5);
     }
 
     const weightedContribution = questionScore * adjustedWeight;

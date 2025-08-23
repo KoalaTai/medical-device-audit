@@ -38,10 +38,10 @@
 - **Why it matters**: Provides systematic evaluation of critical regulatory compliance areas across multiple international frameworks while allowing focused assessments for specific market requirements
 - **Success criteria**: Users can select specific frameworks or complete comprehensive assessment, with filtered questions maintaining relevance and regulatory accuracy
 
-### 2. Intelligent Scoring Engine
-- **What it does**: Calculates weighted readiness score (0-100) with critical failure logic and Red/Amber/Green status
-- **Why it matters**: Provides objective, defensible risk assessment with regulatory context
-- **Success criteria**: Scores accurately reflect compliance posture and critical gaps are properly flagged
+### 2. Intelligent Scoring Engine with Risk-Based Weighting
+- **What it does**: Calculates weighted readiness score (0-100) with device risk classification adjustments, critical failure logic, and Red/Amber/Green status
+- **Why it matters**: Provides objective, defensible risk assessment that reflects actual regulatory burden based on device classification and characteristics
+- **Success criteria**: Scores accurately reflect compliance posture with appropriate risk multipliers for different device classes, and critical gaps are properly flagged
 
 ### 3. Professional Deliverables Generation
 - **What it does**: Creates gap analysis, CAPA plan, and audit interview scripts in markdown format
@@ -53,7 +53,12 @@
 - **Why it matters**: Enables professional documentation and record keeping
 - **Success criteria**: Clean file downloads with timestamped naming convention and framework-specific content
 
-### 5. Regulatory Framework Filtering
+### 5. Device Risk Classification System
+- **What it does**: Allows users to specify their device risk classification (FDA Class I/II/III, EU Class I/IIa/IIb/III) and characteristics (sterile, measuring, active components, drug-device combination) to adjust scoring weights
+- **Why it matters**: Higher risk devices have proportionally greater regulatory burden and compliance requirements - scoring should reflect this reality
+- **Success criteria**: Risk classification multipliers appropriately adjust question weights and scoring thresholds based on device classification
+
+### 6. Regulatory Framework Filtering
 - **What it does**: Allows users to select specific regulatory frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) to focus their assessment
 - **Why it matters**: Enables targeted compliance evaluation for specific markets, reducing assessment time and increasing relevance
 - **Success criteria**: Questions filter accurately based on framework selection, scores reflect only relevant requirements, exports include framework context

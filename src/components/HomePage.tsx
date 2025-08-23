@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RegulatoryFrameworkFilter } from '@/components/RegulatoryFrameworkFilter';
-import { FilterOptions, RegulatoryFramework } from '@/lib/types';
+import { RiskClassificationSelector } from '@/components/RiskClassificationSelector';
+import { FilterOptions, RegulatoryFramework, RiskClassification } from '@/lib/types';
 import { CheckCircle, Warning, FileText, Shield } from '@phosphor-icons/react';
 
 interface HomePageProps {
@@ -17,6 +18,13 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
   });
 
   const canStartAssessment = filterOptions.includeAllFrameworks || filterOptions.selectedFrameworks.length > 0;
+
+  const handleRiskClassificationChange = (riskClassification: RiskClassification) => {
+    setFilterOptions(current => ({
+      ...current,
+      riskClassification
+    }));
+  };
 
   const handleStartAssessment = () => {
     if (canStartAssessment) {
@@ -130,7 +138,12 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
         className="mb-8"
       />
 
-      <Card className="border-warning/50 bg-warning/5 mb-8">
+      <RiskClassificationSelector
+        value={filterOptions.riskClassification}
+        onChange={handleRiskClassificationChange}
+      />
+
+      <Card className="border-warning/50 bg-warning/5 mb-8 mt-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-warning-foreground">
             <Warning size={24} className="text-warning" />

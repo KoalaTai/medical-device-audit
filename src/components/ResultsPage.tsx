@@ -300,7 +300,7 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
         </TabsContent>
 
         <TabsContent value="scoring" className="space-y-4">
-          <ScoringExplanation scoreResult={scoreResult} />
+          <ScoringExplanation scoreResult={scoreResult} filterOptions={filterOptions} />
         </TabsContent>
 
         <TabsContent value="capa" className="space-y-4">

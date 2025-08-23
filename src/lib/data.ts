@@ -1,4 +1,4 @@
-import { Question, StandardsMap, RegulatoryFramework } from './types';
+import { Question, StandardsMap, RegulatoryFramework, DeviceRiskClass, RiskClassification } from './types';
 
 export const questionnaire: Question[] = [
   {
@@ -8,7 +8,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'QMS.820.30',
     critical: true,
-    frameworks: ['CFR_820', 'ISO_13485']
+    frameworks: ['CFR_820', 'ISO_13485'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.5,
+      'Class IIa': 0.9,
+      'Class IIb': 1.2
+    }
   },
   {
     id: 'Q2',
@@ -17,7 +24,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'QMS.820.30',
     critical: true,
-    frameworks: ['CFR_820', 'ISO_13485']
+    frameworks: ['CFR_820', 'ISO_13485'],
+    riskMultipliers: {
+      'Class I': 0.7,
+      'Class II': 1.0,
+      'Class III': 1.6,
+      'Class IIa': 0.8,
+      'Class IIb': 1.3
+    }
   },
   {
     id: 'Q3',
@@ -25,7 +39,14 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 4,
     clauseRef: 'QMS.820.30',
-    frameworks: ['CFR_820', 'ISO_13485']
+    frameworks: ['CFR_820', 'ISO_13485'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.4,
+      'Class IIa': 0.9,
+      'Class IIb': 1.2
+    }
   },
   {
     id: 'Q4',
@@ -34,7 +55,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'QMS.820.30',
     critical: true,
-    frameworks: ['CFR_820', 'ISO_13485']
+    frameworks: ['CFR_820', 'ISO_13485'],
+    riskMultipliers: {
+      'Class I': 0.6,
+      'Class II': 1.0,
+      'Class III': 1.8,
+      'Class IIa': 0.8,
+      'Class IIb': 1.4
+    }
   },
   {
     id: 'Q5',
@@ -60,7 +88,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'ISO.14971',
     critical: true,
-    frameworks: ['ISO_13485', 'MDR']
+    frameworks: ['ISO_13485', 'MDR'],
+    riskMultipliers: {
+      'Class I': 0.9,
+      'Class II': 1.0,
+      'Class III': 1.7,
+      'Class IIa': 1.0,
+      'Class IIb': 1.4
+    }
   },
   {
     id: 'Q8',
@@ -86,7 +121,14 @@ export const questionnaire: Question[] = [
     weight: 4,
     clauseRef: 'ISO.8.3',
     critical: true,
-    frameworks: ['ISO_13485']
+    frameworks: ['ISO_13485'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.5,
+      'Class IIa': 0.9,
+      'Class IIb': 1.3
+    }
   },
   {
     id: 'Q11',
@@ -103,7 +145,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'ISO.8.5',
     critical: true,
-    frameworks: ['ISO_13485', 'CFR_820']
+    frameworks: ['ISO_13485', 'CFR_820'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.6,
+      'Class IIa': 0.9,
+      'Class IIb': 1.3
+    }
   },
   {
     id: 'Q13',
@@ -113,7 +162,14 @@ export const questionnaire: Question[] = [
     clauseRef: 'QMS.820.75',
     options: ['100% - All processes', '80-99% - Most processes', '50-79% - Some processes', 'Less than 50%', 'No validation program'],
     critical: true,
-    frameworks: ['CFR_820']
+    frameworks: ['CFR_820'],
+    riskMultipliers: {
+      'Class I': 0.7,
+      'Class II': 1.0,
+      'Class III': 1.6,
+      'Class IIa': 0.8,
+      'Class IIb': 1.4
+    }
   },
   {
     id: 'Q14',
@@ -147,7 +203,14 @@ export const questionnaire: Question[] = [
     weight: 4,
     clauseRef: 'ISO.7.5',
     critical: true,
-    frameworks: ['ISO_13485']
+    frameworks: ['ISO_13485'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.4,
+      'Class IIa': 0.9,
+      'Class IIb': 1.2
+    }
   },
   {
     id: 'Q18',
@@ -182,7 +245,14 @@ export const questionnaire: Question[] = [
     weight: 4,
     clauseRef: 'ISO.7.5.3',
     critical: true,
-    frameworks: ['ISO_13485', 'MDR']
+    frameworks: ['ISO_13485', 'MDR'],
+    riskMultipliers: {
+      'Class I': 0.7,
+      'Class II': 1.0,
+      'Class III': 1.5,
+      'Class IIa': 0.9,
+      'Class IIb': 1.3
+    }
   },
   {
     id: 'Q22',
@@ -227,7 +297,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'MDR.15',
     critical: true,
-    frameworks: ['MDR']
+    frameworks: ['MDR'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.3,
+      'Class IIa': 1.0,
+      'Class IIb': 1.2
+    }
   },
   {
     id: 'Q27',
@@ -245,7 +322,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'MDR.61',
     critical: true,
-    frameworks: ['MDR']
+    frameworks: ['MDR'],
+    riskMultipliers: {
+      'Class I': 0.5,
+      'Class II': 1.0,
+      'Class III': 1.8,
+      'Class IIa': 0.8,
+      'Class IIb': 1.4
+    }
   },
   {
     id: 'Q29',
@@ -281,7 +365,14 @@ export const questionnaire: Question[] = [
     clauseRef: 'MDR.87',
     options: ['Always within required timeframes', 'Usually timely with minor delays', 'Sometimes delayed', 'Frequently delayed', 'No systematic reporting'],
     critical: true,
-    frameworks: ['MDR']
+    frameworks: ['MDR'],
+    riskMultipliers: {
+      'Class I': 0.8,
+      'Class II': 1.0,
+      'Class III': 1.5,
+      'Class IIa': 1.0,
+      'Class IIb': 1.3
+    }
   },
   {
     id: 'Q33',
@@ -290,7 +381,14 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'MDR.52',
     critical: true,
-    frameworks: ['MDR']
+    frameworks: ['MDR'],
+    riskMultipliers: {
+      'Class I': 0.6,
+      'Class II': 1.0,
+      'Class III': 1.7,
+      'Class IIa': 0.8,
+      'Class IIb': 1.4
+    }
   },
   // ISO 14155 (Clinical Investigation) specific questions
   {
@@ -335,7 +433,14 @@ export const questionnaire: Question[] = [
     clauseRef: 'ISO.14155.9',
     options: ['Comprehensive ADE monitoring system', 'Basic adverse event tracking', 'Limited safety monitoring', 'No systematic ADE collection', 'Not applicable'],
     critical: true,
-    frameworks: ['ISO_14155']
+    frameworks: ['ISO_14155'],
+    riskMultipliers: {
+      'Class I': 0.6,
+      'Class II': 1.0,
+      'Class III': 1.8,
+      'Class IIa': 0.8,
+      'Class IIb': 1.5
+    }
   },
   {
     id: 'Q39',
@@ -703,4 +808,140 @@ export function getQuestionCountByFramework(): Record<RegulatoryFramework, numbe
   });
   
   return counts;
+}
+
+/**
+ * Determine device risk classification based on user inputs
+ */
+export function determineRiskClassification(
+  fdaClass?: 'Class I' | 'Class II' | 'Class III',
+  euClass?: 'Class I' | 'Class IIa' | 'Class IIb' | 'Class III',
+  isSterile: boolean = false,
+  isMeasuring: boolean = false,
+  hasActiveComponents: boolean = false,
+  isDrugDevice: boolean = false
+): RiskClassification {
+  let riskLevel: 'Low' | 'Medium' | 'High' | 'Very High';
+  
+  // Determine overall risk level based on classifications and characteristics
+  if (fdaClass === 'Class III' || euClass === 'Class III') {
+    riskLevel = 'Very High';
+  } else if (fdaClass === 'Class II' || euClass === 'Class IIb' || isDrugDevice) {
+    riskLevel = 'High';
+  } else if (euClass === 'Class IIa' || isSterile || hasActiveComponents || isMeasuring) {
+    riskLevel = 'Medium';
+  } else {
+    riskLevel = 'Low';
+  }
+  
+  return {
+    fdaClass,
+    euClass,
+    isSterile,
+    isMeasuring,
+    hasActiveComponents,
+    isDrugDevice,
+    riskLevel
+  };
+}
+
+/**
+ * Get risk-adjusted weight for a question based on device classification
+ */
+export function getRiskAdjustedWeight(
+  question: Question, 
+  riskClassification?: RiskClassification
+): number {
+  if (!riskClassification || !question.riskMultipliers) {
+    return question.weight;
+  }
+  
+  // Determine which risk class to use for multiplier
+  let deviceClass: DeviceRiskClass | undefined;
+  
+  if (riskClassification.fdaClass) {
+    deviceClass = riskClassification.fdaClass;
+  } else if (riskClassification.euClass) {
+    deviceClass = riskClassification.euClass;
+  }
+  
+  if (!deviceClass || !question.riskMultipliers[deviceClass]) {
+    return question.weight;
+  }
+  
+  const baseMultiplier = question.riskMultipliers[deviceClass];
+  
+  // Additional multipliers based on device characteristics
+  let adjustedMultiplier = baseMultiplier;
+  
+  if (riskClassification.isSterile && question.clauseRef === 'ISO.11135') {
+    adjustedMultiplier *= 1.2;
+  }
+  
+  if (riskClassification.hasActiveComponents && 
+      (question.clauseRef === 'IEC.62304' || question.clauseRef === 'IEC.62366')) {
+    adjustedMultiplier *= 1.3;
+  }
+  
+  if (riskClassification.isDrugDevice && question.critical) {
+    adjustedMultiplier *= 1.1;
+  }
+  
+  return Math.round(question.weight * adjustedMultiplier * 10) / 10;
+}
+
+/**
+ * Get risk-specific question recommendations
+ */
+export function getRiskSpecificRecommendations(
+  riskClassification?: RiskClassification
+): string[] {
+  if (!riskClassification) return [];
+  
+  const recommendations: string[] = [];
+  
+  switch (riskClassification.riskLevel) {
+    case 'Very High':
+      recommendations.push(
+        'Implement comprehensive clinical evaluation and post-market surveillance',
+        'Establish rigorous design controls with extensive verification and validation',
+        'Maintain detailed risk management throughout entire product lifecycle'
+      );
+      break;
+    case 'High':
+      recommendations.push(
+        'Conduct thorough clinical evaluation or leverage predicate devices',
+        'Implement robust quality management system with regular audits',
+        'Establish comprehensive post-market monitoring program'
+      );
+      break;
+    case 'Medium':
+      recommendations.push(
+        'Maintain appropriate design controls and risk management',
+        'Implement targeted post-market surveillance activities',
+        'Ensure proper validation of critical processes'
+      );
+      break;
+    case 'Low':
+      recommendations.push(
+        'Maintain basic quality management system documentation',
+        'Implement essential design controls and risk management',
+        'Establish fundamental post-market monitoring'
+      );
+      break;
+  }
+  
+  if (riskClassification.isSterile) {
+    recommendations.push('Validate sterilization processes with comprehensive documentation');
+  }
+  
+  if (riskClassification.hasActiveComponents) {
+    recommendations.push('Implement software lifecycle processes per IEC 62304');
+  }
+  
+  if (riskClassification.isDrugDevice) {
+    recommendations.push('Coordinate with drug regulatory requirements and combination product guidance');
+  }
+  
+  return recommendations;
 }

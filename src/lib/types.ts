@@ -1,5 +1,17 @@
 export type RegulatoryFramework = 'ISO_13485' | 'CFR_820' | 'MDR' | 'ISO_14155';
 
+export type DeviceRiskClass = 'Class I' | 'Class II' | 'Class III' | 'Class IIa' | 'Class IIb';
+
+export interface RiskClassification {
+  fdaClass?: 'Class I' | 'Class II' | 'Class III';
+  euClass?: 'Class I' | 'Class IIa' | 'Class IIb' | 'Class III';
+  isSterile?: boolean;
+  isMeasuring?: boolean;
+  hasActiveComponents?: boolean;
+  isDrugDevice?: boolean;
+  riskLevel: 'Low' | 'Medium' | 'High' | 'Very High';
+}
+
 export interface Question {
   id: string;
   prompt: string;
@@ -9,6 +21,7 @@ export interface Question {
   options?: string[];
   critical?: boolean;
   frameworks: RegulatoryFramework[];
+  riskMultipliers?: Partial<Record<DeviceRiskClass, number>>;
 }
 
 export interface StandardsMap {
@@ -103,4 +116,5 @@ export interface ExportData {
 export interface FilterOptions {
   selectedFrameworks: RegulatoryFramework[];
   includeAllFrameworks: boolean;
+  riskClassification?: RiskClassification;
 }
