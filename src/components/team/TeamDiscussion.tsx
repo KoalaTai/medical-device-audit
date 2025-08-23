@@ -23,7 +23,7 @@ export function TeamDiscussion({ session, currentMember, onPhaseComplete }: Team
   const [discussionNote, setDiscussionNote] = useState<string>('');
   const [selectedVote, setSelectedVote] = useState<string | boolean>('');
   
-  const questions = getFilteredQuestions(session.selectedFrameworks, session.riskClassification);
+  const questions = getFilteredQuestions(session.selectedFrameworks, false);
   const questionsNeedingDiscussion = questions.filter(q => {
     const response = teamResponses[q.id];
     return response && (response.disagreementLevel !== 'none' || !response.consensusReached);

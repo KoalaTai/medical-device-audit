@@ -24,7 +24,7 @@ export function TeamQuestionnaire({ session, currentMember, onPhaseComplete }: T
   const [confidence, setConfidence] = useState<number>(3);
   const [rationale, setRationale] = useState<string>('');
   
-  const questions = getFilteredQuestions(session.selectedFrameworks, session.riskClassification);
+  const questions = getFilteredQuestions(session.selectedFrameworks, false);
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 

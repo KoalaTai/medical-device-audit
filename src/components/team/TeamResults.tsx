@@ -33,7 +33,7 @@ export function TeamResults({ session, currentMember, onBack }: TeamResultsProps
           answer: response.finalAnswer!
         }));
 
-      const questions = getFilteredQuestions(session.selectedFrameworks, session.riskClassification);
+      const questions = getFilteredQuestions(session.selectedFrameworks, false);
       const score = calculateTeamScore(
         assessmentResponses,
         questions,
