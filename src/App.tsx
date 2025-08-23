@@ -5,9 +5,10 @@ import { HomePage } from './components/HomePage';
 import { QuestionnairePage } from './components/QuestionnairePage';
 import { ResultsPage } from './components/ResultsPage';
 import { AuditChecklist } from './components/AuditChecklist';
+import { InterviewSimulation } from './components/InterviewSimulation';
 import { AssessmentResponse, FilterOptions } from './lib/types';
 
-type AppState = 'home' | 'questionnaire' | 'results' | 'checklist';
+type AppState = 'home' | 'questionnaire' | 'results' | 'checklist' | 'interview';
 
 function App() {
   const [currentPage, setCurrentPage] = useKV<AppState>('currentPage', 'home');
@@ -30,8 +31,12 @@ function App() {
     setCurrentPage(() => 'results');
   };
 
-  const handleBackToResults = () => {
-    setCurrentPage(() => 'results');
+  const handleShowAuditChecklist = () => {
+    setCurrentPage(() => 'checklist');
+  };
+
+  const handleShowInterviewSimulation = () => {
+    setCurrentPage(() => 'interview');
   };
 
   const handleRestartAssessment = () => {
@@ -64,6 +69,7 @@ function App() {
           responses={responses || []}
           onRestartAssessment={handleRestartAssessment}
           onShowAuditChecklist={handleShowAuditChecklist}
+          onShowInterviewSimulation={handleShowInterviewSimulation}
           filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
         />
       )}
@@ -72,6 +78,13 @@ function App() {
           deviceCategory={filterOptions.riskClassification.deviceCategory || 'diagnostic'}
           riskClass={filterOptions.riskClassification.fdaClass || filterOptions.riskClassification.euClass || 'Class II'}
           frameworks={filterOptions.selectedFrameworks || ['ISO_13485', 'CFR_820']}
+          onBack={handleBackToResults}
+        />
+      )}
+      {currentPage === 'interview' && (
+        <InterviewSimulation
+          responses={responses || []}
+          filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
           onBack={handleBackToResults}
         />
       )}

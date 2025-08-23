@@ -63,7 +63,12 @@
 - **Why it matters**: Each device category has unique regulatory requirements and audit focus areas - generic preparation is insufficient for thorough audit readiness
 - **Success criteria**: Checklists filter appropriately by device category and risk class, provide realistic time estimates, include framework-specific guidance, and track completion progress
 
-### 7. Regulatory Framework Filtering
+### 7. Regulatory Inspector Interview Simulation
+- **What it does**: Interactive interview practice sessions with role-based questions (Lead Inspector, Quality Specialist, Technical Reviewer, Compliance Officer), expected responses, follow-up questions, common mistakes, and confidence scoring
+- **Why it matters**: Regulatory interviews are often the most critical and unpredictable part of audits - proper preparation through realistic practice significantly improves audit outcomes and reduces anxiety
+- **Success criteria**: Questions are tailored based on assessment gaps, multiple inspector roles are represented, practice sessions include realistic follow-ups, expected answers provide clear guidance, progress tracking shows confidence scores and improvement areas
+
+### 8. Regulatory Framework Filtering
 - **What it does**: Allows users to select specific regulatory frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) to focus their assessment and preparation activities
 - **Why it matters**: Enables targeted compliance evaluation for specific markets, reducing assessment time and increasing relevance
 - **Success criteria**: Questions filter accurately based on framework selection, scores reflect only relevant requirements, exports include framework context, checklists show applicable regulatory requirements

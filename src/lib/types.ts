@@ -168,3 +168,36 @@ export interface Milestone {
   deliverables: string[];
   criticalPath: boolean;
 }
+
+export interface InterviewQuestion {
+  id: string;
+  category: string;
+  question: string;
+  expectedResponse: string;
+  followUpQuestions?: string[];
+  commonMistakes: string[];
+  clauseReferences: string[];
+  difficulty: 'basic' | 'intermediate' | 'advanced';
+  frameworks: RegulatoryFramework[];
+  roles: InspectorRole[];
+  tips: string[];
+}
+
+export type InspectorRole = 'lead_inspector' | 'quality_specialist' | 'technical_reviewer' | 'compliance_officer';
+
+export interface InterviewSession {
+  id: string;
+  role: InspectorRole;
+  questions: InterviewQuestion[];
+  duration: number; // minutes
+  focus: string[];
+  preparation: string[];
+}
+
+export interface InterviewResponse {
+  questionId: string;
+  userResponse: string;
+  confidence: number; // 1-5 scale
+  needsImprovement: boolean;
+  notes?: string;
+}

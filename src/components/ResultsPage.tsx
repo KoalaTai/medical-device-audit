@@ -15,7 +15,8 @@ import {
   ClipboardText,
   Users,
   Calculator,
-  CheckSquare
+  CheckSquare,
+  MessageCircle
 } from '@phosphor-icons/react';
 import { AssessmentResponse, FilterOptions } from '../lib/types';
 import { calculateScore } from '../lib/scoring';
@@ -29,9 +30,10 @@ interface ResultsPageProps {
   onRestartAssessment: () => void;
   filterOptions: FilterOptions;
   onShowAuditChecklist?: () => void;
+  onShowInterviewSimulation?: () => void;
 }
 
-export function ResultsPage({ responses, onRestartAssessment, filterOptions, onShowAuditChecklist }: ResultsPageProps) {
+export function ResultsPage({ responses, onRestartAssessment, filterOptions, onShowAuditChecklist, onShowInterviewSimulation }: ResultsPageProps) {
   const scoreResult = useMemo(() => calculateScore(responses, filterOptions), [responses, filterOptions]);
   const assessmentQuestions = useMemo(() => {
     return filterOptions 
@@ -413,6 +415,17 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions, onS
           >
             <CheckSquare size={20} />
             View Audit Checklist
+          </Button>
+        )}
+        {onShowInterviewSimulation && (
+          <Button 
+            onClick={onShowInterviewSimulation} 
+            size="lg" 
+            variant="secondary"
+            className="flex items-center gap-2"
+          >
+            <MessageCircle size={20} />
+            Practice Interview Questions
           </Button>
         )}
         <Button 
