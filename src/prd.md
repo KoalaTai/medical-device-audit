@@ -33,10 +33,10 @@
 
 ## Essential Features
 
-### 1. Comprehensive Assessment Questionnaire
-- **What it does**: 40 carefully crafted questions covering ISO 13485, 21 CFR 820, MDR (Medical Device Regulation), and ISO 14155 (Clinical Investigation) requirements
-- **Why it matters**: Provides systematic evaluation of critical regulatory compliance areas across multiple international frameworks
-- **Success criteria**: Users can complete assessment smoothly with clear question context and regulatory framework identification
+### 1. Comprehensive Assessment Questionnaire with Framework Filtering
+- **What it does**: 40 carefully crafted questions covering ISO 13485, 21 CFR 820, MDR (Medical Device Regulation), and ISO 14155 (Clinical Investigation) requirements with the ability to focus on specific regulatory frameworks
+- **Why it matters**: Provides systematic evaluation of critical regulatory compliance areas across multiple international frameworks while allowing focused assessments for specific market requirements
+- **Success criteria**: Users can select specific frameworks or complete comprehensive assessment, with filtered questions maintaining relevance and regulatory accuracy
 
 ### 2. Intelligent Scoring Engine
 - **What it does**: Calculates weighted readiness score (0-100) with critical failure logic and Red/Amber/Green status
@@ -51,7 +51,12 @@
 ### 4. Export Package System
 - **What it does**: Bundles all deliverables with assessment data for download
 - **Why it matters**: Enables professional documentation and record keeping
-- **Success criteria**: Clean file downloads with timestamped naming convention
+- **Success criteria**: Clean file downloads with timestamped naming convention and framework-specific content
+
+### 5. Regulatory Framework Filtering
+- **What it does**: Allows users to select specific regulatory frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) to focus their assessment
+- **Why it matters**: Enables targeted compliance evaluation for specific markets, reducing assessment time and increasing relevance
+- **Success criteria**: Questions filter accurately based on framework selection, scores reflect only relevant requirements, exports include framework context
 
 ## Design Direction
 

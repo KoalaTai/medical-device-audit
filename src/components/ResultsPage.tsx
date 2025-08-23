@@ -15,18 +15,20 @@ import {
   ClipboardText,
   Users
 } from '@phosphor-icons/react';
-import { AssessmentResponse } from '../lib/types';
+import { AssessmentResponse, FilterOptions } from '../lib/types';
 import { calculateScore } from '../lib/scoring';
 import { createExportPackage, downloadExportPackage } from '../lib/export';
+import { frameworkLabels } from '../lib/data';
 import { toast } from 'sonner';
 
 interface ResultsPageProps {
   responses: AssessmentResponse[];
   onRestartAssessment: () => void;
+  filterOptions: FilterOptions;
 }
 
-export function ResultsPage({ responses, onRestartAssessment }: ResultsPageProps) {
-  const scoreResult = useMemo(() => calculateScore(responses), [responses]);
+export function ResultsPage({ responses, onRestartAssessment, filterOptions }: ResultsPageProps) {
+  const scoreResult = useMemo(() => calculateScore(responses, filterOptions), [responses, filterOptions]);
   
   const statusConfig = {
     red: {
@@ -60,7 +62,7 @@ export function ResultsPage({ responses, onRestartAssessment }: ResultsPageProps
 
   const handleExport = () => {
     try {
-      const exportData = createExportPackage(scoreResult, responses);
+      const exportData = createExportPackage(scoreResult, responses, filterOptions);
       downloadExportPackage(exportData);
       toast.success('Assessment package exported successfully');
     } catch (error) {
@@ -78,6 +80,24 @@ export function ResultsPage({ responses, onRestartAssessment }: ResultsPageProps
         <p className="text-muted-foreground">
           Your audit readiness evaluation is complete
         </p>
+        {/* Framework summary */}
+        <div className="mt-4 flex justify-center flex-wrap gap-2">
+          {filterOptions.includeAllFrameworks ? (
+            <>
+              <Badge variant="outline">Complete Assessment</Badge>
+              <Badge variant="secondary">All Frameworks</Badge>
+            </>
+          ) : (
+            <>
+              <Badge variant="outline">Focused Assessment</Badge>
+              {filterOptions.selectedFrameworks.map(framework => (
+                <Badge key={framework} variant="secondary">
+                  {frameworkLabels[framework]}
+                </Badge>
+              ))}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Score Overview */}

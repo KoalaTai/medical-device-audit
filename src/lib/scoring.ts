@@ -1,15 +1,20 @@
-import { AssessmentResponse, ScoreResult, Gap } from './types';
-import { questionnaire, standardsMap, evidenceExamples } from './data';
+import { AssessmentResponse, ScoreResult, Gap, FilterOptions } from './types';
+import { getFilteredQuestions, standardsMap, evidenceExamples } from './data';
 
-export function calculateScore(responses: AssessmentResponse[]): ScoreResult {
+export function calculateScore(responses: AssessmentResponse[], filterOptions?: FilterOptions): ScoreResult {
+  // Get the filtered questions that were used for this assessment
+  const assessmentQuestions = filterOptions 
+    ? getFilteredQuestions(filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks)
+    : getFilteredQuestions([], true); // fallback to all questions
+  
   let totalWeightedScore = 0;
   let totalWeight = 0;
   const gaps: Gap[] = [];
   const criticalFailures: string[] = [];
 
-  // Process each response
+  // Process each response, but only for questions that were part of the filtered assessment
   for (const response of responses) {
-    const question = questionnaire.find(q => q.id === response.questionId);
+    const question = assessmentQuestions.find(q => q.id === response.questionId);
     if (!question) continue;
 
     const clauseInfo = standardsMap[question.clauseRef];

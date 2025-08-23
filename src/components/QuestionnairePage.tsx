@@ -1,10 +1,11 @@
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, ArrowRight, Info } from '@phosphor-icons/react';
-import { questionnaire } from '../lib/data';
-import { AssessmentResponse } from '../lib/types';
+import { getFilteredQuestions } from '../lib/data';
+import { AssessmentResponse, FilterOptions } from '../lib/types';
 import { QuestionInput } from './QuestionInput';
 
 interface QuestionnairePageProps {
@@ -13,6 +14,7 @@ interface QuestionnairePageProps {
   currentQuestionIndex: number;
   setCurrentQuestionIndex: (updater: (prev: number) => number) => void;
   onComplete: (responses: AssessmentResponse[]) => void;
+  filterOptions: FilterOptions;
 }
 
 export function QuestionnairePage({
@@ -20,10 +22,16 @@ export function QuestionnairePage({
   setResponses,
   currentQuestionIndex,
   setCurrentQuestionIndex,
-  onComplete
+  onComplete,
+  filterOptions
 }: QuestionnairePageProps) {
-  const currentQuestion = questionnaire[currentQuestionIndex];
-  const totalQuestions = questionnaire.length;
+  const filteredQuestions = useMemo(() => 
+    getFilteredQuestions(filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks),
+    [filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks]
+  );
+  
+  const currentQuestion = filteredQuestions[currentQuestionIndex];
+  const totalQuestions = filteredQuestions.length;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
   const currentResponse = responses.find(r => r.questionId === currentQuestion.id);

@@ -1,6 +1,7 @@
-import { ScoreResult, AssessmentResponse, ExportData } from './types';
+import { ScoreResult, AssessmentResponse, ExportData, FilterOptions } from './types';
+import { frameworkLabels } from './data';
 
-export function generateGapAnalysis(scoreResult: ScoreResult): string {
+export function generateGapAnalysis(scoreResult: ScoreResult, filterOptions?: FilterOptions): string {
   const { score, status, gaps, criticalFailures } = scoreResult;
   
   const statusText = status === 'red' ? 'RED - HIGH RISK' : 
@@ -11,7 +12,9 @@ export function generateGapAnalysis(scoreResult: ScoreResult): string {
 
 ## Assessment Summary
 
-**Overall Readiness Score:** ${score}/100  
+**Assessment Type:** ${filterOptions?.includeAllFrameworks ? 'Comprehensive Assessment (All Frameworks)' : 'Focused Assessment'}  
+${!filterOptions?.includeAllFrameworks ? `**Selected Frameworks:** ${filterOptions?.selectedFrameworks.map(f => frameworkLabels[f]).join(', ') || 'Not specified'}  
+` : ''}**Overall Readiness Score:** ${score}/100  
 **Risk Status:** ${statusText}  
 **Critical Failures:** ${criticalFailures.length}  
 
@@ -301,7 +304,8 @@ export function generateInterviewScript(): string {
 
 export function createExportPackage(
   scoreResult: ScoreResult,
-  responses: AssessmentResponse[]
+  responses: AssessmentResponse[],
+  filterOptions?: FilterOptions
 ): ExportData {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   
@@ -311,9 +315,10 @@ export function createExportPackage(
     status: scoreResult.status,
     responses,
     gaps: scoreResult.gaps,
-    gapAnalysis: generateGapAnalysis(scoreResult),
+    gapAnalysis: generateGapAnalysis(scoreResult, filterOptions),
     capaPlan: generateCapaPlan(scoreResult),
-    interviewScript: generateInterviewScript()
+    interviewScript: generateInterviewScript(),
+    selectedFrameworks: filterOptions?.selectedFrameworks || []
   };
 }
 

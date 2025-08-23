@@ -1,13 +1,28 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { RegulatoryFrameworkFilter } from '@/components/RegulatoryFrameworkFilter';
+import { FilterOptions, RegulatoryFramework } from '@/lib/types';
 import { CheckCircle, Warning, FileText, Shield } from '@phosphor-icons/react';
 
 interface HomePageProps {
-  onStartAssessment: () => void;
+  onStartAssessment: (filterOptions: FilterOptions) => void;
 }
 
 export function HomePage({ onStartAssessment }: HomePageProps) {
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    selectedFrameworks: [],
+    includeAllFrameworks: true
+  });
+
+  const canStartAssessment = filterOptions.includeAllFrameworks || filterOptions.selectedFrameworks.length > 0;
+
+  const handleStartAssessment = () => {
+    if (canStartAssessment) {
+      onStartAssessment(filterOptions);
+    }
+  };
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <div className="text-center mb-12">
@@ -109,6 +124,12 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
         </CardContent>
       </Card>
 
+      <RegulatoryFrameworkFilter
+        filterOptions={filterOptions}
+        onFilterChange={setFilterOptions}
+        className="mb-8"
+      />
+
       <Card className="border-warning/50 bg-warning/5 mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-warning-foreground">
@@ -134,9 +155,19 @@ export function HomePage({ onStartAssessment }: HomePageProps) {
       </Card>
 
       <div className="text-center">
-        <Button onClick={onStartAssessment} size="lg" className="px-8 py-3 text-lg">
+        <Button 
+          onClick={handleStartAssessment} 
+          size="lg" 
+          className="px-8 py-3 text-lg"
+          disabled={!canStartAssessment}
+        >
           Begin Assessment
         </Button>
+        {!canStartAssessment && (
+          <p className="text-sm text-muted-foreground mt-2">
+            Please select at least one regulatory framework to continue
+          </p>
+        )}
         <div className="mt-4 flex justify-center gap-4">
           <Badge variant="outline">ISO 13485</Badge>
           <Badge variant="outline">21 CFR 820</Badge>

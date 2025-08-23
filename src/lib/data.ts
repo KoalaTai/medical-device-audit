@@ -1,4 +1,4 @@
-import { Question, StandardsMap } from './types';
+import { Question, StandardsMap, RegulatoryFramework } from './types';
 
 export const questionnaire: Question[] = [
   {
@@ -7,7 +7,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'QMS.820.30',
-    critical: true
+    critical: true,
+    frameworks: ['CFR_820', 'ISO_13485']
   },
   {
     id: 'Q2',
@@ -15,14 +16,16 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'QMS.820.30',
-    critical: true
+    critical: true,
+    frameworks: ['CFR_820', 'ISO_13485']
   },
   {
     id: 'Q3',
     prompt: 'Do you conduct formal design reviews at appropriate stages of development?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'QMS.820.30'
+    clauseRef: 'QMS.820.30',
+    frameworks: ['CFR_820', 'ISO_13485']
   },
   {
     id: 'Q4',
@@ -30,7 +33,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'QMS.820.30',
-    critical: true
+    critical: true,
+    frameworks: ['CFR_820', 'ISO_13485']
   },
   {
     id: 'Q5',
@@ -38,14 +42,16 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 3,
     clauseRef: 'ISO.9.3',
-    options: ['Annually', 'Semi-annually', 'Quarterly', 'Monthly', 'Not conducted']
+    options: ['Annually', 'Semi-annually', 'Quarterly', 'Monthly', 'Not conducted'],
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q6',
     prompt: 'Are supplier CAPAs verified for effectiveness before closure?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'ISO.8.5'
+    clauseRef: 'ISO.8.5',
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q7',
@@ -53,14 +59,16 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'ISO.14971',
-    critical: true
+    critical: true,
+    frameworks: ['ISO_13485', 'MDR']
   },
   {
     id: 'Q8',
     prompt: 'Are post-market surveillance activities systematically conducted and documented?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'ISO.8.2.1'
+    clauseRef: 'ISO.8.2.1',
+    frameworks: ['ISO_13485', 'MDR']
   },
   {
     id: 'Q9',
@@ -68,7 +76,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 3,
     clauseRef: 'ISO.7.2',
-    options: ['Comprehensive training program with records', 'Basic training documentation', 'On-the-job training only', 'No formal program']
+    options: ['Comprehensive training program with records', 'Basic training documentation', 'On-the-job training only', 'No formal program'],
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q10',
@@ -76,14 +85,16 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 4,
     clauseRef: 'ISO.8.3',
-    critical: true
+    critical: true,
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q11',
     prompt: 'Do you conduct periodic internal audits of all QMS processes?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'ISO.9.2'
+    clauseRef: 'ISO.9.2',
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q12',
@@ -91,7 +102,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'ISO.8.5',
-    critical: true
+    critical: true,
+    frameworks: ['ISO_13485', 'CFR_820']
   },
   {
     id: 'Q13',
@@ -100,21 +112,24 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'QMS.820.75',
     options: ['100% - All processes', '80-99% - Most processes', '50-79% - Some processes', 'Less than 50%', 'No validation program'],
-    critical: true
+    critical: true,
+    frameworks: ['CFR_820']
   },
   {
     id: 'Q14',
     prompt: 'Do you maintain documented procedures for all quality management system processes?',
     type: 'yesno',
     weight: 3,
-    clauseRef: 'ISO.4.2'
+    clauseRef: 'ISO.4.2',
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q15',
     prompt: 'Are customer complaints investigated and trended for patterns?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'QMS.820.198'
+    clauseRef: 'QMS.820.198',
+    frameworks: ['CFR_820']
   },
   {
     id: 'Q16',
@@ -122,7 +137,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'QMS.820.30',
-    options: ['Formal change control process with approvals', 'Basic documentation of changes', 'Informal change tracking', 'No systematic control']
+    options: ['Formal change control process with approvals', 'Basic documentation of changes', 'Informal change tracking', 'No systematic control'],
+    frameworks: ['CFR_820', 'ISO_13485']
   },
   {
     id: 'Q17',
@@ -130,7 +146,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 4,
     clauseRef: 'ISO.7.5',
-    critical: true
+    critical: true,
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q18',
@@ -138,14 +155,16 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 5,
     clauseRef: 'ISO.11135',
-    options: ['Complete validation with full documentation', 'Partial validation studies', 'Rely on third-party validation', 'No validation conducted', 'Not applicable - non-sterile products']
+    options: ['Complete validation with full documentation', 'Partial validation studies', 'Rely on third-party validation', 'No validation conducted', 'Not applicable - non-sterile products'],
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q19',
     prompt: 'Are measuring and monitoring equipment calibrated and controlled?',
     type: 'yesno',
     weight: 3,
-    clauseRef: 'ISO.7.1.5'
+    clauseRef: 'ISO.7.1.5',
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q20',
@@ -153,7 +172,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 2,
     clauseRef: 'ISO.4.2',
-    options: ['Annually', 'Every 2 years', 'Every 3+ years', 'Only when required by regulations', 'Never updated']
+    options: ['Annually', 'Every 2 years', 'Every 3+ years', 'Only when required by regulations', 'Never updated'],
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q21',
@@ -161,7 +181,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 4,
     clauseRef: 'ISO.7.5.3',
-    critical: true
+    critical: true,
+    frameworks: ['ISO_13485', 'MDR']
   },
   {
     id: 'Q22',
@@ -169,7 +190,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'IEC.62304',
-    options: ['Full IEC 62304 compliance', 'Partial software processes', 'Basic software documentation', 'No formal software processes', 'Not applicable - no software']
+    options: ['Full IEC 62304 compliance', 'Partial software processes', 'Basic software documentation', 'No formal software processes', 'Not applicable - no software'],
+    frameworks: ['ISO_13485', 'MDR']
   },
   {
     id: 'Q23',
@@ -177,14 +199,16 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'ISO.7.4',
-    options: ['Comprehensive supplier qualification and monitoring', 'Basic supplier approvals', 'Incoming inspection only', 'No formal supplier controls']
+    options: ['Comprehensive supplier qualification and monitoring', 'Basic supplier approvals', 'Incoming inspection only', 'No formal supplier controls'],
+    frameworks: ['ISO_13485']
   },
   {
     id: 'Q24',
     prompt: 'Are advisory notices and field safety corrective actions documented and tracked?',
     type: 'yesno',
     weight: 5,
-    clauseRef: 'ISO.8.2.2'
+    clauseRef: 'ISO.8.2.2',
+    frameworks: ['ISO_13485', 'MDR']
   },
   {
     id: 'Q25',
@@ -192,7 +216,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 3,
     clauseRef: 'IEC.62366',
-    options: ['Complete usability engineering file', 'Basic usability studies', 'Limited user testing', 'No formal usability program']
+    options: ['Complete usability engineering file', 'Basic usability studies', 'Limited user testing', 'No formal usability program'],
+    frameworks: ['ISO_13485', 'MDR']
   },
   // MDR (Medical Device Regulation) specific questions
   {
@@ -201,7 +226,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'MDR.15',
-    critical: true
+    critical: true,
+    frameworks: ['MDR']
   },
   {
     id: 'Q27',
@@ -209,7 +235,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'MDR.27',
-    options: ['Fully implemented with database registration', 'Partially implemented', 'In development', 'Not implemented']
+    options: ['Fully implemented with database registration', 'Partially implemented', 'In development', 'Not implemented'],
+    frameworks: ['MDR']
   },
   {
     id: 'Q28',
@@ -217,7 +244,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'MDR.61',
-    critical: true
+    critical: true,
+    frameworks: ['MDR']
   },
   {
     id: 'Q29',
@@ -225,14 +253,16 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'MDR.61.11',
-    options: ['Active PMCF with ongoing studies', 'PMCF plan exists but limited execution', 'Basic PMCF documentation', 'No PMCF activities']
+    options: ['Active PMCF with ongoing studies', 'PMCF plan exists but limited execution', 'Basic PMCF documentation', 'No PMCF activities'],
+    frameworks: ['MDR']
   },
   {
     id: 'Q30',
     prompt: 'Are periodic safety update reports (PSURs) prepared and submitted as required?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'MDR.86'
+    clauseRef: 'MDR.86',
+    frameworks: ['MDR']
   },
   {
     id: 'Q31',
@@ -240,7 +270,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 3,
     clauseRef: 'MDR.11',
-    options: ['Formal agreement with qualified AR', 'Basic AR arrangement', 'In negotiation', 'Not applicable - EU manufacturer', 'No AR appointed']
+    options: ['Formal agreement with qualified AR', 'Basic AR arrangement', 'In negotiation', 'Not applicable - EU manufacturer', 'No AR appointed'],
+    frameworks: ['MDR']
   },
   {
     id: 'Q32',
@@ -249,7 +280,8 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'MDR.87',
     options: ['Always within required timeframes', 'Usually timely with minor delays', 'Sometimes delayed', 'Frequently delayed', 'No systematic reporting'],
-    critical: true
+    critical: true,
+    frameworks: ['MDR']
   },
   {
     id: 'Q33',
@@ -257,7 +289,8 @@ export const questionnaire: Question[] = [
     type: 'yesno',
     weight: 5,
     clauseRef: 'MDR.52',
-    critical: true
+    critical: true,
+    frameworks: ['MDR']
   },
   // ISO 14155 (Clinical Investigation) specific questions
   {
@@ -266,7 +299,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'ISO.14155.6',
-    options: ['Full ISO 14155 compliance', 'Partial compliance with gaps', 'Basic protocol development', 'No formal clinical protocols', 'Not applicable - no clinical studies']
+    options: ['Full ISO 14155 compliance', 'Partial compliance with gaps', 'Basic protocol development', 'No formal clinical protocols', 'Not applicable - no clinical studies'],
+    frameworks: ['ISO_14155']
   },
   {
     id: 'Q35',
@@ -274,21 +308,24 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'ISO.14155.7',
-    options: ['Comprehensive investigator qualification program', 'Basic investigator oversight', 'Limited qualification processes', 'No systematic investigator management', 'Not applicable']
+    options: ['Comprehensive investigator qualification program', 'Basic investigator oversight', 'Limited qualification processes', 'No systematic investigator management', 'Not applicable'],
+    frameworks: ['ISO_14155']
   },
   {
     id: 'Q36',
     prompt: 'Are clinical investigation reports prepared with statistical analysis plans?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'ISO.14155.12'
+    clauseRef: 'ISO.14155.12',
+    frameworks: ['ISO_14155']
   },
   {
     id: 'Q37',
     prompt: 'Do you conduct risk-benefit analyses for ongoing clinical investigations?',
     type: 'yesno',
     weight: 4,
-    clauseRef: 'ISO.14155.8'
+    clauseRef: 'ISO.14155.8',
+    frameworks: ['ISO_14155']
   },
   {
     id: 'Q38',
@@ -297,14 +334,16 @@ export const questionnaire: Question[] = [
     weight: 5,
     clauseRef: 'ISO.14155.9',
     options: ['Comprehensive ADE monitoring system', 'Basic adverse event tracking', 'Limited safety monitoring', 'No systematic ADE collection', 'Not applicable'],
-    critical: true
+    critical: true,
+    frameworks: ['ISO_14155']
   },
   {
     id: 'Q39',
     prompt: 'Do you maintain clinical investigation master files with all essential documents?',
     type: 'yesno',
     weight: 3,
-    clauseRef: 'ISO.14155.11'
+    clauseRef: 'ISO.14155.11',
+    frameworks: ['ISO_14155']
   },
   {
     id: 'Q40',
@@ -312,7 +351,8 @@ export const questionnaire: Question[] = [
     type: 'select',
     weight: 4,
     clauseRef: 'ISO.14155.10',
-    options: ['Validated clinical data management system', 'Basic data management procedures', 'Manual data collection only', 'No formal data management', 'Not applicable']
+    options: ['Validated clinical data management system', 'Basic data management procedures', 'Manual data collection only', 'No formal data management', 'Not applicable'],
+    frameworks: ['ISO_14155']
   }
 ];
 
@@ -320,152 +360,186 @@ export const standardsMap: StandardsMap = {
   'QMS.820.30': {
     title: 'Design Controls',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'CFR_820'
   },
   'ISO.9.3': {
     title: 'Management Review',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'ISO_13485'
   },
   'ISO.8.5': {
     title: 'Corrective and Preventive Action',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'ISO_13485'
   },
   'ISO.14971': {
     title: 'Risk Management',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'ISO_13485'
   },
   'ISO.8.2.1': {
     title: 'Post-Market Surveillance',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_13485'
   },
   'ISO.7.2': {
     title: 'Competence',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'ISO_13485'
   },
   'ISO.8.3': {
     title: 'Control of Nonconforming Output',
     riskWeight: 4,
-    critical: true
+    critical: true,
+    framework: 'ISO_13485'
   },
   'ISO.9.2': {
     title: 'Internal Audit',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_13485'
   },
   'QMS.820.75': {
     title: 'Process Validation',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'CFR_820'
   },
   'ISO.4.2': {
     title: 'Documentation Requirements',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'ISO_13485'
   },
   'QMS.820.198': {
     title: 'Complaint Files',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'CFR_820'
   },
   'ISO.7.5': {
     title: 'Production and Service Provision',
     riskWeight: 4,
-    critical: true
+    critical: true,
+    framework: 'ISO_13485'
   },
   'ISO.11135': {
     title: 'Sterilization of Healthcare Products',
-    riskWeight: 5
+    riskWeight: 5,
+    framework: 'ISO_13485'
   },
   'ISO.7.1.5': {
     title: 'Monitoring and Measuring Resources',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'ISO_13485'
   },
   'ISO.7.5.3': {
     title: 'Traceability',
     riskWeight: 4,
-    critical: true
+    critical: true,
+    framework: 'ISO_13485'
   },
   'IEC.62304': {
     title: 'Medical Device Software',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_13485'
   },
   'ISO.7.4': {
     title: 'Control of Externally Provided Processes, Products and Services',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_13485'
   },
   'ISO.8.2.2': {
     title: 'Feedback',
-    riskWeight: 5
+    riskWeight: 5,
+    framework: 'ISO_13485'
   },
   'IEC.62366': {
     title: 'Usability Engineering',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'ISO_13485'
   },
   // MDR clauses
   'MDR.15': {
     title: 'Person Responsible for Regulatory Compliance',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'MDR'
   },
   'MDR.27': {
     title: 'Unique Device Identification System',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'MDR'
   },
   'MDR.61': {
     title: 'Clinical Evaluation and Post-Market Clinical Follow-up',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'MDR'
   },
   'MDR.61.11': {
     title: 'Post-Market Clinical Follow-up',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'MDR'
   },
   'MDR.86': {
     title: 'Periodic Safety Update Report',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'MDR'
   },
   'MDR.11': {
     title: 'Authorized Representative',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'MDR'
   },
   'MDR.87': {
     title: 'Reporting of Serious Incidents',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'MDR'
   },
   'MDR.52': {
     title: 'Conformity Assessment Procedures',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'MDR'
   },
   // ISO 14155 clauses
   'ISO.14155.6': {
     title: 'Clinical Investigation Protocol',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_14155'
   },
   'ISO.14155.7': {
     title: 'Clinical Investigators and Investigation Sites',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_14155'
   },
   'ISO.14155.12': {
     title: 'Clinical Investigation Report',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_14155'
   },
   'ISO.14155.8': {
     title: 'Risk-Benefit Analysis',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_14155'
   },
   'ISO.14155.9': {
     title: 'Safety Reporting',
     riskWeight: 5,
-    critical: true
+    critical: true,
+    framework: 'ISO_14155'
   },
   'ISO.14155.11': {
     title: 'Clinical Investigation Master File',
-    riskWeight: 3
+    riskWeight: 3,
+    framework: 'ISO_14155'
   },
   'ISO.14155.10': {
     title: 'Clinical Data Management',
-    riskWeight: 4
+    riskWeight: 4,
+    framework: 'ISO_14155'
   }
 };
 
@@ -578,3 +652,55 @@ export const evidenceExamples: Record<string, string[]> = {
     'Regulatory Submissions'
   ]
 };
+
+export const frameworkLabels: Record<RegulatoryFramework, string> = {
+  'ISO_13485': 'ISO 13485:2016',
+  'CFR_820': '21 CFR 820',
+  'MDR': 'EU MDR 2017/745',
+  'ISO_14155': 'ISO 14155:2020'
+};
+
+export const frameworkDescriptions: Record<RegulatoryFramework, string> = {
+  'ISO_13485': 'Medical devices - Quality management systems - Requirements for regulatory purposes',
+  'CFR_820': 'Quality System Regulation for medical devices in the United States',
+  'MDR': 'Medical Device Regulation for the European Union market',
+  'ISO_14155': 'Clinical investigation of medical devices for human subjects'
+};
+
+/**
+ * Filter questions based on selected regulatory frameworks
+ */
+export function getFilteredQuestions(
+  selectedFrameworks: RegulatoryFramework[], 
+  includeAllFrameworks: boolean = false
+): Question[] {
+  if (includeAllFrameworks || selectedFrameworks.length === 0) {
+    return questionnaire;
+  }
+  
+  return questionnaire.filter(question => 
+    question.frameworks.some(framework => 
+      selectedFrameworks.includes(framework)
+    )
+  );
+}
+
+/**
+ * Get count of questions for each framework
+ */
+export function getQuestionCountByFramework(): Record<RegulatoryFramework, number> {
+  const counts: Record<RegulatoryFramework, number> = {
+    'ISO_13485': 0,
+    'CFR_820': 0,
+    'MDR': 0,
+    'ISO_14155': 0
+  };
+  
+  questionnaire.forEach(question => {
+    question.frameworks.forEach(framework => {
+      counts[framework]++;
+    });
+  });
+  
+  return counts;
+}

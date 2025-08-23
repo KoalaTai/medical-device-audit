@@ -1,3 +1,5 @@
+export type RegulatoryFramework = 'ISO_13485' | 'CFR_820' | 'MDR' | 'ISO_14155';
+
 export interface Question {
   id: string;
   prompt: string;
@@ -6,6 +8,7 @@ export interface Question {
   clauseRef: string;
   options?: string[];
   critical?: boolean;
+  frameworks: RegulatoryFramework[];
 }
 
 export interface StandardsMap {
@@ -13,6 +16,7 @@ export interface StandardsMap {
     title: string;
     riskWeight: number;
     critical?: boolean;
+    framework: RegulatoryFramework;
   };
 }
 
@@ -46,4 +50,10 @@ export interface ExportData {
   gapAnalysis: string;
   capaPlan: string;
   interviewScript: string;
+  selectedFrameworks: RegulatoryFramework[];
+}
+
+export interface FilterOptions {
+  selectedFrameworks: RegulatoryFramework[];
+  includeAllFrameworks: boolean;
 }
