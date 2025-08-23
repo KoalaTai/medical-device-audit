@@ -6,9 +6,10 @@ import { QuestionnairePage } from './components/QuestionnairePage';
 import { ResultsPage } from './components/ResultsPage';
 import { AuditChecklist } from './components/AuditChecklist';
 import { InterviewSimulation } from './components/InterviewSimulation';
+import { TeamTrainingPage } from './components/TeamTrainingPage';
 import { AssessmentResponse, FilterOptions } from './lib/types';
 
-type AppState = 'home' | 'questionnaire' | 'results' | 'checklist' | 'interview';
+type AppState = 'home' | 'questionnaire' | 'results' | 'checklist' | 'interview' | 'team_training';
 
 function App() {
   const [currentPage, setCurrentPage] = useKV<AppState>('currentPage', 'home');
@@ -37,6 +38,14 @@ function App() {
 
   const handleShowInterviewSimulation = () => {
     setCurrentPage(() => 'interview');
+  };
+
+  const handleShowTeamTraining = () => {
+    setCurrentPage(() => 'team_training');
+  };
+
+  const handleBackToResults = () => {
+    setCurrentPage(() => 'results');
   };
 
   const handleRestartAssessment = () => {
@@ -70,6 +79,7 @@ function App() {
           onRestartAssessment={handleRestartAssessment}
           onShowAuditChecklist={handleShowAuditChecklist}
           onShowInterviewSimulation={handleShowInterviewSimulation}
+          onShowTeamTraining={handleShowTeamTraining}
           filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
         />
       )}
@@ -85,6 +95,12 @@ function App() {
         <InterviewSimulation
           responses={responses || []}
           filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
+          onBack={handleBackToResults}
+        />
+      )}
+      {currentPage === 'team_training' && (
+        <TeamTrainingPage
+          filterOptions={filterOptions}
           onBack={handleBackToResults}
         />
       )}

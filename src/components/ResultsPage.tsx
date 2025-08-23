@@ -31,9 +31,10 @@ interface ResultsPageProps {
   filterOptions: FilterOptions;
   onShowAuditChecklist?: () => void;
   onShowInterviewSimulation?: () => void;
+  onShowTeamTraining?: () => void;
 }
 
-export function ResultsPage({ responses, onRestartAssessment, filterOptions, onShowAuditChecklist, onShowInterviewSimulation }: ResultsPageProps) {
+export function ResultsPage({ responses, onRestartAssessment, filterOptions, onShowAuditChecklist, onShowInterviewSimulation, onShowTeamTraining }: ResultsPageProps) {
   const scoreResult = useMemo(() => calculateScore(responses, filterOptions), [responses, filterOptions]);
   const assessmentQuestions = useMemo(() => {
     return filterOptions 
@@ -426,6 +427,17 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions, onS
           >
             <MessageCircle size={20} />
             Practice Interview Questions
+          </Button>
+        )}
+        {onShowTeamTraining && (
+          <Button 
+            onClick={onShowTeamTraining} 
+            size="lg" 
+            variant="secondary"
+            className="flex items-center gap-2"
+          >
+            <Users size={20} />
+            Start Team Training
           </Button>
         )}
         <Button 

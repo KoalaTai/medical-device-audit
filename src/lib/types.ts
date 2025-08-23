@@ -201,3 +201,125 @@ export interface InterviewResponse {
   needsImprovement: boolean;
   notes?: string;
 }
+
+// Team Training Mode Types
+export type TeamRole = 'quality_manager' | 'regulatory_affairs' | 'design_engineer' | 'manufacturing_lead' | 'clinical_specialist';
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: TeamRole;
+  department: string;
+  joinedAt: Date;
+  isLeader: boolean;
+}
+
+export interface TeamSession {
+  id: string;
+  name: string;
+  createdAt: Date;
+  createdBy: string;
+  status: 'setup' | 'in_progress' | 'completed' | 'archived';
+  members: TeamMember[];
+  selectedFrameworks: RegulatoryFramework[];
+  riskClassification?: RiskClassification;
+  currentPhase: TrainingPhase;
+  settings: TeamSessionSettings;
+}
+
+export type TrainingPhase = 'role_assignment' | 'individual_assessment' | 'team_discussion' | 'consensus_building' | 'results_review';
+
+export interface TeamSessionSettings {
+  allowRoleDiscussion: boolean;
+  requireConsensus: boolean;
+  showIndividualScores: boolean;
+  enablePeerReview: boolean;
+  discussionTimeLimit?: number; // minutes per question
+  votingMethod: 'majority' | 'weighted' | 'leader_decision';
+  anonymousVoting: boolean;
+}
+
+export interface TeamResponse {
+  questionId: string;
+  individualResponses: Record<string, { // memberId -> response
+    answer: string | boolean;
+    confidence: number;
+    rationale?: string;
+    timestamp: Date;
+  }>;
+  discussionNotes?: string[];
+  consensusReached: boolean;
+  finalAnswer?: string | boolean;
+  finalRationale?: string;
+  disagreementLevel: 'none' | 'minor' | 'significant' | 'major';
+  votingRounds: VotingRound[];
+}
+
+export interface VotingRound {
+  roundNumber: number;
+  timestamp: Date;
+  votes: Record<string, string | boolean>; // memberId -> vote
+  discussion: string[];
+  outcome: 'consensus' | 'majority' | 'escalated' | 'deferred';
+}
+
+export interface TeamScoreResult extends ScoreResult {
+  individualScores: Record<string, ScoreResult>; // memberId -> individual score
+  consensusMetrics: ConsensusMetrics;
+  teamDynamics: TeamDynamics;
+  roleAnalysis: Record<TeamRole, RoleAnalysis>;
+  collaborationScore: number; // 0-100
+  recommendedActions: TeamRecommendation[];
+}
+
+export interface ConsensusMetrics {
+  overallConsensusRate: number; // percentage
+  timeToConsensus: Record<string, number>; // questionId -> minutes
+  disagreementPatterns: DisagreementPattern[];
+  consensusQuality: 'strong' | 'moderate' | 'weak' | 'forced';
+  votingRoundsRequired: number;
+}
+
+export interface DisagreementPattern {
+  type: 'role_based' | 'experience_based' | 'interpretation_based' | 'knowledge_gap';
+  frequency: number;
+  affectedQuestions: string[];
+  involvedRoles: TeamRole[];
+  resolutionMethod: 'discussion' | 'expert_override' | 'external_reference' | 'deferred';
+}
+
+export interface TeamDynamics {
+  participationBalance: Record<string, number>; // memberId -> participation percentage
+  influencePatterns: InfluencePattern[];
+  communicationEffectiveness: number; // 0-100
+  conflictResolutionStyle: 'collaborative' | 'competitive' | 'accommodating' | 'avoiding' | 'compromising';
+  decisionMakingSpeed: 'fast' | 'moderate' | 'slow' | 'stalled';
+}
+
+export interface InfluencePattern {
+  memberId: string;
+  influenceScore: number; // how often their position becomes final consensus
+  persuasionRate: number; // how often they change others' minds
+  flexibilityScore: number; // how often they change their own mind
+  domainExpertise: string[]; // areas where they have highest influence
+}
+
+export interface RoleAnalysis {
+  role: TeamRole;
+  expectedStrengths: string[];
+  actualPerformance: number; // 0-100
+  knowledgeGaps: Gap[];
+  contributionQuality: number; // 0-100
+  collaborationScore: number; // 0-100
+  recommendedTraining: string[];
+  roleSpecificInsights: string[];
+}
+
+export interface TeamRecommendation {
+  type: 'training' | 'process_improvement' | 'role_adjustment' | 'communication' | 'leadership';
+  priority: 'immediate' | 'short_term' | 'long_term';
+  description: string;
+  targetRoles: TeamRole[];
+  estimatedImpact: number; // 0-100
+  implementationSteps: string[];
+}

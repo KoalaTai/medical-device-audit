@@ -1,4 +1,4 @@
-import { ScoreResult, AssessmentResponse, ExportData, FilterOptions } from './types';
+import { ScoreResult, AssessmentResponse, ExportData, FilterOptions, TeamScoreResult, TeamSession, TeamResponse } from './types';
 import { frameworkLabels } from './data';
 
 export function generateGapAnalysis(scoreResult: ScoreResult, filterOptions?: FilterOptions): string {
@@ -414,4 +414,410 @@ export function downloadExportPackage(exportData: ExportData): void {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   });
+}
+
+// Team Training Export Functions
+export function generateTeamGapAnalysis(teamScore: TeamScoreResult, session: TeamSession): string {
+  const baseAnalysis = generateGapAnalysis(teamScore, {
+    selectedFrameworks: session.selectedFrameworks,
+    includeAllFrameworks: false
+  });
+
+  const teamAnalysis = `# Team Training Assessment Report
+
+## Team Session Overview
+
+**Session Name:** ${session.name}  
+**Assessment Date:** ${session.createdAt.toLocaleDateString()}  
+**Team Size:** ${session.members.length} members  
+**Selected Frameworks:** ${session.selectedFrameworks.map(f => frameworkLabels[f]).join(', ')}  
+**Session Status:** ${session.status.toUpperCase()}  
+
+## Team Composition
+
+| Member | Role | Department | Individual Score | Performance |
+|--------|------|------------|-----------------|-------------|
+${session.members.map(member => {
+  const individualScore = teamScore.individualScores[member.id];
+  const scoreText = individualScore ? `${Math.round(individualScore.score)}` : 'N/A';
+  const performance = individualScore ? 
+    (individualScore.score >= 85 ? 'Strong' : 
+     individualScore.score >= 70 ? 'Adequate' : 'Needs Improvement') : 'N/A';
+  return `| ${member.name} | ${member.role.replace('_', ' ')} | ${member.department} | ${scoreText} | ${performance} |`;
+}).join('\n')}
+
+## Team Performance Summary
+
+**Overall Team Score:** ${Math.round(teamScore.score)}/100  
+**Collaboration Effectiveness:** ${Math.round(teamScore.collaborationScore)}/100  
+**Consensus Achievement Rate:** ${Math.round(teamScore.consensusMetrics.overallConsensusRate)}%  
+**Team Status:** ${teamScore.status.toUpperCase()}  
+
+## Consensus Analysis
+
+**Overall Consensus Rate:** ${Math.round(teamScore.consensusMetrics.overallConsensusRate)}%  
+**Average Voting Rounds Required:** ${teamScore.consensusMetrics.votingRoundsRequired.toFixed(1)}  
+**Consensus Quality:** ${teamScore.consensusMetrics.consensusQuality}  
+
+### Disagreement Patterns
+${teamScore.consensusMetrics.disagreementPatterns.length > 0 ? 
+  teamScore.consensusMetrics.disagreementPatterns.map((pattern, index) => 
+    `${index + 1}. **${pattern.type.replace('_', ' ')}**: ${pattern.frequency} occurrences across ${pattern.affectedQuestions.length} questions`
+  ).join('\n') : 
+  'No significant disagreement patterns identified.'
+}
+
+## Team Dynamics Assessment
+
+**Communication Effectiveness:** ${Math.round(teamScore.teamDynamics.communicationEffectiveness)}%  
+**Decision Making Speed:** ${teamScore.teamDynamics.decisionMakingSpeed}  
+**Conflict Resolution Style:** ${teamScore.teamDynamics.conflictResolutionStyle}  
+
+### Participation Balance
+${Object.entries(teamScore.teamDynamics.participationBalance)
+  .sort(([,a], [,b]) => b - a)
+  .map(([memberId, participation]) => {
+    const member = session.members.find(m => m.id === memberId);
+    return member ? `- **${member.name}**: ${Math.round(participation)}%` : '';
+  })
+  .filter(Boolean)
+  .join('\n')
+}
+
+${baseAnalysis}
+
+## Team-Specific Recommendations
+
+${teamScore.recommendedActions.map((rec, index) => `
+### ${index + 1}. ${rec.description}
+
+**Type:** ${rec.type.replace('_', ' ')}  
+**Priority:** ${rec.priority.replace('_', ' ')}  
+**Estimated Impact:** ${rec.estimatedImpact}%  
+**Target Roles:** ${rec.targetRoles.map(r => r.replace('_', ' ')).join(', ')}  
+
+**Implementation Steps:**
+${rec.implementationSteps.map(step => `- ${step}`).join('\n')}
+`).join('\n')}
+
+## Role-Based Performance Analysis
+
+${Object.entries(teamScore.roleAnalysis).map(([role, analysis]) => `
+### ${role.replace('_', ' ')} Performance
+
+**Overall Performance:** ${Math.round(analysis.actualPerformance)}%  
+**Contribution Quality:** ${Math.round(analysis.contributionQuality)}%  
+**Collaboration Score:** ${Math.round(analysis.collaborationScore)}%  
+
+**Knowledge Gaps:**
+${analysis.knowledgeGaps.slice(0, 3).map(gap => `- ${gap.clauseTitle} (${gap.clauseRef})`).join('\n')}
+
+**Recommended Training:**
+${analysis.recommendedTraining.map(training => `- ${training}`).join('\n')}
+
+**Role-Specific Insights:**
+${analysis.roleSpecificInsights.map(insight => `- ${insight}`).join('\n')}
+`).join('\n')}
+`;
+
+  return teamAnalysis;
+}
+
+export function generateTeamCapaPlan(teamScore: TeamScoreResult, session: TeamSession): string {
+  const baseCapa = generateCapaPlan(teamScore);
+  
+  const teamCapa = `# Team Training CAPA Plan
+
+## Team Training Session Overview
+
+**Session:** ${session.name}  
+**Date:** ${session.createdAt.toLocaleDateString()}  
+**Participants:** ${session.members.length} team members  
+
+## Team Performance Issues Identified
+
+${teamScore.recommendedActions.map((action, index) => `
+### Team Issue ${index + 1}: ${action.description}
+
+**Root Cause Analysis:**
+1. Why does this team challenge exist? → ${action.type === 'communication' ? 'Lack of structured discussion protocols' : 
+                                       action.type === 'leadership' ? 'Unbalanced participation patterns' :
+                                       action.type === 'training' ? 'Knowledge gaps in team members' :
+                                       'Process inefficiencies'}
+2. Why are protocols/patterns/knowledge lacking? → Insufficient team training and setup
+3. Why is team training insufficient? → No formal team assessment processes
+4. Why are there no formal processes? → Limited understanding of team dynamics impact
+5. Why is understanding limited? → Lack of team-based audit preparation experience
+
+**Corrective Actions:**
+${action.implementationSteps.map(step => `- ${step}`).join('\n')}
+
+**Target Roles:** ${action.targetRoles.map(r => r.replace('_', ' ')).join(', ')}  
+**Priority:** ${action.priority.replace('_', ' ')}  
+**Expected Impact:** ${action.estimatedImpact}% improvement  
+`).join('\n')}
+
+## Individual Member CAPAs
+
+${Object.entries(teamScore.individualScores).map(([memberId, score]) => {
+  const member = session.members.find(m => m.id === memberId);
+  if (!member || !score.gaps.length) return '';
+  
+  return `
+### ${member.name} (${member.role.replace('_', ' ')}) - Individual CAPA
+
+**Performance Score:** ${Math.round(score.score)}/100  
+**Critical Issues:** ${score.criticalFailures.length}  
+**Priority Gaps:** ${score.gaps.slice(0, 3).map(gap => gap.clauseTitle).join(', ')}  
+
+**Individual Action Plan:**
+- Schedule focused training on identified knowledge gaps
+- Assign mentor from high-performing team member
+- Provide additional resources for weak areas
+- Follow up with individual assessment in 30 days
+`;
+}).filter(Boolean).join('\n')}
+
+${baseCapa}
+
+## Team Follow-up Plan
+
+### 30-Day Review
+- Conduct follow-up team assessment
+- Measure improvement in consensus building
+- Evaluate participation balance
+- Review individual performance gains
+
+### 60-Day Review  
+- Complete team effectiveness assessment
+- Validate CAPA effectiveness
+- Plan next team training session
+- Document lessons learned
+
+### 90-Day Review
+- Conduct mini audit simulation
+- Measure readiness improvement
+- Close successful CAPAs
+- Plan ongoing team development
+`;
+
+  return teamCapa;
+}
+
+export function generateTeamInterviewScript(session: TeamSession): string {
+  const baseScript = generateInterviewScript();
+  
+  const teamScript = `# Team-Based Audit Interview Preparation
+
+## Team Session: ${session.name}
+
+This script is designed for team-based interview preparation, with role-specific guidance for each team member.
+
+## Team Member Roles and Responsibilities
+
+${session.members.map(member => {
+  const roleQuestions = getQuestionsForRole(member.role);
+  return `
+### ${member.name} - ${member.role.replace('_', ' ')}
+
+**Primary Areas of Responsibility:**
+${getRoleResponsibilities(member.role).map(resp => `- ${resp}`).join('\n')}
+
+**Key Interview Topics:**
+${roleQuestions.slice(0, 5).map(q => `- ${q}`).join('\n')}
+
+**Preparation Focus:**
+- Review procedures and documentation in your area
+- Prepare objective evidence for your processes
+- Practice explaining your role in cross-functional activities
+- Be ready to demonstrate process effectiveness
+`;
+}).join('\n')}
+
+## Team Coordination Guidelines
+
+### Before the Interview
+1. **Team Huddle** (15 minutes before inspector arrival)
+   - Review key messages and positions
+   - Confirm who leads discussions for each area
+   - Align on any process changes or improvements
+
+2. **Role Clarity**
+   - Each member knows their primary areas
+   - Understand when to defer to other team members
+   - Practice smooth handoffs between areas
+
+3. **Evidence Preparation**
+   - Ensure all required documents are accessible
+   - Designate backup locations for critical evidence
+   - Test any systems or demonstrations
+
+### During Team Interviews
+1. **Stay in Role** - Focus on your areas of expertise
+2. **Support Colleagues** - Provide backup when needed
+3. **Consistent Messaging** - Align with team positions
+4. **Active Listening** - Pay attention to inspector concerns
+5. **Professional Demeanor** - Maintain confidence and cooperation
+
+### Communication Protocols
+- **Lead Spokesperson**: ${session.members.find(m => m.isLeader)?.name || 'Team Leader'} handles general questions
+- **Technical Questions**: Defer to appropriate subject matter expert
+- **Escalation**: If unsure, it's okay to say "Let me get you the right person"
+- **Documentation**: ${session.members.find(m => m.role === 'quality_manager')?.name || 'Quality Manager'} handles QMS documents
+
+${baseScript}
+
+## Team-Specific Practice Scenarios
+
+### Scenario 1: Cross-Functional Process Review
+**Inspector Focus**: Design controls and risk management integration
+**Team Response**: 
+- **Design Engineer** leads technical discussion
+- **Quality Manager** explains process oversight
+- **Regulatory Affairs** covers regulatory requirements
+- **Manufacturing Lead** describes production implications
+
+### Scenario 2: CAPA System Review  
+**Inspector Focus**: How the team handles corrective actions
+**Team Response**:
+- **Quality Manager** explains CAPA process
+- **Relevant SME** discusses specific examples
+- **All Members** show how they participate in CAPA activities
+
+### Scenario 3: Management Review Process
+**Inspector Focus**: How leadership oversees quality
+**Team Response**:
+- **Team Leader** explains management review structure
+- **Each Member** describes their input and follow-up actions
+- **Quality Manager** shows documentation and follow-up
+
+## Post-Interview Team Debrief
+
+### Immediate Actions (within 2 hours)
+1. Gather team to discuss inspector feedback
+2. Identify any commitments made during interview
+3. Document action items and assignments
+4. Plan follow-up evidence if requested
+
+### Success Metrics
+- All team members stayed within their roles
+- Consistent answers across team members  
+- Effective evidence presentation
+- Professional team dynamic demonstrated
+- Inspector concerns addressed collaboratively
+`;
+
+  return teamScript;
+}
+
+function getQuestionsForRole(role: string): string[] {
+  const roleQuestions: Record<string, string[]> = {
+    'quality_manager': [
+      'Describe your quality management system structure',
+      'How do you monitor QMS effectiveness?',
+      'Explain your management review process',
+      'How do you handle nonconformances?',
+      'Describe your internal audit program'
+    ],
+    'regulatory_affairs': [
+      'How do you track regulatory requirements?',
+      'Describe your submission strategy',
+      'How do you handle post-market surveillance?',
+      'Explain your regulatory change management',
+      'How do you maintain regulatory compliance?'
+    ],
+    'design_engineer': [
+      'Walk through your design control process',
+      'How do you manage design inputs and outputs?',
+      'Describe your verification and validation approach',
+      'How do you handle design changes?',
+      'Explain your risk management integration'
+    ],
+    'manufacturing_lead': [
+      'Describe your production control processes',
+      'How do you validate manufacturing processes?',
+      'Explain your material control systems',
+      'How do you handle process deviations?',
+      'Describe your equipment maintenance program'
+    ],
+    'clinical_specialist': [
+      'How do you evaluate clinical data?',
+      'Describe your post-market data collection',
+      'How do you handle adverse events?',
+      'Explain your clinical study management',
+      'How do you maintain clinical evaluation?'
+    ]
+  };
+  
+  return roleQuestions[role] || [];
+}
+
+function getRoleResponsibilities(role: string): string[] {
+  const responsibilities: Record<string, string[]> = {
+    'quality_manager': [
+      'Quality management system oversight',
+      'CAPA system management',
+      'Internal audit coordination',
+      'Management review facilitation',
+      'Supplier quality management'
+    ],
+    'regulatory_affairs': [
+      'Regulatory strategy development',
+      'Submission preparation and maintenance',
+      'Post-market surveillance coordination',
+      'Regulatory intelligence monitoring',
+      'Global compliance management'
+    ],
+    'design_engineer': [
+      'Design control implementation',
+      'Risk management execution',
+      'Verification and validation activities',
+      'Design change control',
+      'Technical file maintenance'
+    ],
+    'manufacturing_lead': [
+      'Production process control',
+      'Process validation oversight',
+      'Material and supply chain management',
+      'Equipment qualification and maintenance',
+      'Batch record control'
+    ],
+    'clinical_specialist': [
+      'Clinical evaluation activities',
+      'Post-market clinical data analysis',
+      'Adverse event reporting',
+      'Clinical study oversight',
+      'Literature monitoring'
+    ]
+  };
+  
+  return responsibilities[role] || [];
+}
+
+export async function exportTeamAssessment(
+  teamScore: TeamScoreResult,
+  session: TeamSession,
+  teamResponses: Record<string, TeamResponse>
+): Promise<Blob> {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  
+  const files: { [key: string]: string } = {
+    'team_gap_analysis.md': generateTeamGapAnalysis(teamScore, session),
+    'team_capa_plan.md': generateTeamCapaPlan(teamScore, session),
+    'team_interview_script.md': generateTeamInterviewScript(session),
+    'team_assessment_data.json': JSON.stringify({
+      timestamp,
+      session,
+      teamScore,
+      teamResponses
+    }, null, 2)
+  };
+
+  // In a real implementation, you'd use JSZip to create a proper ZIP file
+  // For now, we'll create a simple text bundle
+  const bundleContent = Object.entries(files)
+    .map(([filename, content]) => `=== ${filename} ===\n\n${content}\n\n`)
+    .join('\n');
+  
+  return new Blob([bundleContent], { type: 'text/plain' });
 }

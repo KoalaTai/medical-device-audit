@@ -48,6 +48,16 @@
 - **Why it matters**: Provides actionable, professional documentation for audit preparation
 - **Success criteria**: Documents are comprehensive, well-formatted, and immediately usable
 
+### 4. Team Training Mode with Collaborative Assessment
+- **What it does**: Multi-participant training sessions with role-based perspectives, consensus building, and team dynamics analysis
+- **Why it matters**: Enables organizations to prepare audit teams collaboratively, understanding different role perspectives and improving team readiness
+- **Success criteria**: Teams can complete assessments together, reach consensus on answers, and receive analysis of team effectiveness and individual contributions
+
+### 5. Role-Based Interview Simulation
+- **What it does**: Interactive interview preparation with role-specific questions and team coordination guidelines
+- **Why it matters**: Prepares teams for actual audit interviews with realistic scenarios and role clarity
+- **Success criteria**: Teams understand their roles, practice coordination, and gain confidence in audit situations
+
 ### 4. Export Package System
 - **What it does**: Bundles all deliverables with assessment data for download
 - **Why it matters**: Enables professional documentation and record keeping
