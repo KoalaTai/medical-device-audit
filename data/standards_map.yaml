@@ -1,0 +1,50 @@
+# Regulatory Standards Mapping
+
+# ISO 13485:2016 and 21 CFR 820 clause mapping for medical device audit readiness
+
+standards:
+  iso_13485:
+    name: "ISO 13485:2016 Medical Devices - Quality Management Systems"
+    sections:
+      - id: "QMS.820.30"
+        title: "Quality Management System"
+        description: "General requirements for QMS establishment and maintenance"
+      - id: "DOC.820.40"
+        title: "Document Control"
+        description: "Control of documents and data"
+      - id: "MGR.820.20"
+        title: "Management Responsibility"
+        description: "Management commitment and responsibility"
+  
+  cfr_820:
+    name: "21 CFR Part 820 - Quality System Regulation"
+    sections:
+      - id: "DES.820.30"
+        title: "Design Controls"
+        description: "Procedures to control the design of the device"
+      - id: "PRO.820.70"
+        title: "Production and Process Controls"
+        description: "Control of production and service processes"
+      - id: "CAP.820.100"
+        title: "Corrective and Preventive Action"
+        description: "CAPA procedures and implementation"
+      - id: "DHR.820.184"
+        title: "Device History Record"
+        description: "Compilation of records for each batch"
+      - id: "MDR.803.50"
+        title: "Medical Device Reporting"
+        description: "Reporting of adverse events"
+
+critical_requirements:
+  - "QMS.820.30"
+  - "MGR.820.20"
+  - "DES.820.30"
+  - "CAP.820.100"
+  - "PRO.820.70"
+  - "DHR.820.184"
+  - "NCO.820.90"
+  - "COM.820.198"
+  - "MDR.803.50"
+
+# Disclaimer: This mapping is simplified for educational purposes.
+# Actual compliance requirements should be verified with current regulations.

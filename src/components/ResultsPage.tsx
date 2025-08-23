@@ -1,454 +1,283 @@
-import { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { 
-  CheckCircle, 
-  Warning, 
-  XCircle, 
-  FileText, 
-  Download,
-  ArrowClockwise,
-  TrendUp,
-  ClipboardText,
-  Users,
-  Calculator,
-  CheckSquare,
-  MessageCircle
-} from '@phosphor-icons/react';
-import { AssessmentResponse, FilterOptions } from '../lib/types';
-import { calculateScore } from '../lib/scoring';
-import { createExportPackage, downloadExportPackage } from '../lib/export';
-import { frameworkLabels, getFilteredQuestions } from '../lib/data';
-import { ScoringExplanation } from './ScoringExplanation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AssessmentResponse, ScoringResult } from '@/lib/types';
+import { calculateScore } from '@/lib/scoring';
+import { generateArtifacts } from '@/lib/artifacts';
+import { exportResults } from '@/lib/export';
+import { Shield, Download, RefreshCw, AlertTriangle, CheckCircle, Clock } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
 interface ResultsPageProps {
   responses: AssessmentResponse[];
   onRestartAssessment: () => void;
-  filterOptions: FilterOptions;
-  onShowAuditChecklist?: () => void;
-  onShowInterviewSimulation?: () => void;
-  onShowTeamTraining?: () => void;
 }
 
-export function ResultsPage({ responses, onRestartAssessment, filterOptions, onShowAuditChecklist, onShowInterviewSimulation, onShowTeamTraining }: ResultsPageProps) {
-  const scoreResult = useMemo(() => calculateScore(responses, filterOptions), [responses, filterOptions]);
-  const assessmentQuestions = useMemo(() => {
-    return filterOptions 
-      ? getFilteredQuestions(filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks)
-      : getFilteredQuestions([], true);
-  }, [filterOptions]);
-  
-  const statusConfig = {
-    red: {
-      icon: XCircle,
-      color: 'text-destructive',
-      bgColor: 'bg-destructive/10',
-      borderColor: 'border-destructive/20',
-      title: 'HIGH RISK',
-      description: 'Immediate action required to address critical gaps'
-    },
-    amber: {
-      icon: Warning,
-      color: 'text-warning',
-      bgColor: 'bg-warning/10',
-      borderColor: 'border-warning/20',
-      title: 'MEDIUM RISK',
-      description: 'Several areas need improvement before audit'
-    },
-    green: {
-      icon: CheckCircle,
-      color: 'text-success',
-      bgColor: 'bg-success/10',
-      borderColor: 'border-success/20',
-      title: 'LOW RISK',
-      description: 'Good compliance posture with minor improvements needed'
+export function ResultsPage({ responses, onRestartAssessment }: ResultsPageProps) {
+  const [scoring, setScoring] = useState<ScoringResult | null>(null);
+  const [artifacts, setArtifacts] = useState<{ gap_list: string; capa_plan: string; interview_script: string } | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+
+  useEffect(() => {
+    if (responses.length > 0) {
+      const result = calculateScore(responses);
+      setScoring(result);
+      const generatedArtifacts = generateArtifacts(result);
+      setArtifacts(generatedArtifacts);
     }
-  };
+  }, [responses]);
 
-  const config = statusConfig[scoreResult.status];
-  const StatusIcon = config.icon;
+  const handleExport = async () => {
+    if (!scoring) return;
 
-  const handleExport = () => {
+    setIsExporting(true);
     try {
-      const exportData = createExportPackage(scoreResult, responses, filterOptions);
-      downloadExportPackage(exportData);
-      toast.success('Assessment package exported successfully');
+      await exportResults(scoring);
+      toast.success('Results exported successfully!');
     } catch (error) {
-      toast.error('Failed to export assessment package');
+      toast.error('Failed to export results. Please try again.');
+      console.error('Export error:', error);
+    } finally {
+      setIsExporting(false);
     }
   };
 
-  return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Assessment Results
-        </h1>
-        <p className="text-muted-foreground">
-          Your audit readiness evaluation is complete
-        </p>
-        {/* Framework summary */}
-        <div className="mt-4 flex justify-center flex-wrap gap-2">
-          {filterOptions.includeAllFrameworks ? (
-            <>
-              <Badge variant="outline">Complete Assessment</Badge>
-              <Badge variant="secondary">All Frameworks</Badge>
-            </>
-          ) : (
-            <>
-              <Badge variant="outline">Focused Assessment</Badge>
-              {filterOptions.selectedFrameworks.map(framework => (
-                <Badge key={framework} variant="secondary">
-                  {frameworkLabels[framework]}
-                </Badge>
-              ))}
-            </>
-          )}
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Green':
+        return <CheckCircle className="w-6 h-6 text-success" />;
+      case 'Amber':
+        return <Clock className="w-6 h-6 text-warning" />;
+      case 'Red':
+        return <AlertTriangle className="w-6 h-6 text-destructive" />;
+      default:
+        return <Shield className="w-6 h-6 text-muted-foreground" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Green':
+        return 'bg-success text-success-foreground';
+      case 'Amber':
+        return 'bg-warning text-warning-foreground';
+      case 'Red':
+        return 'bg-destructive text-destructive-foreground';
+      default:
+        return 'bg-muted text-muted-foreground';
+    }
+  };
+
+  if (!scoring) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Calculating your readiness score...</p>
         </div>
       </div>
+    );
+  }
 
-      {/* Score Overview */}
-      <div className="grid lg:grid-cols-3 gap-6 mb-8">
-        <Card className={`lg:col-span-1 ${config.borderColor} ${config.bgColor}`}>
-          <CardHeader className="text-center pb-4">
-            <div className="flex justify-center mb-4">
-              <StatusIcon size={48} className={config.color} />
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-4">Assessment Results</h1>
+          <p className="text-muted-foreground">
+            Your ISO 13485 / 21 CFR 820 compliance readiness assessment
+          </p>
+        </div>
+
+        {/* Score Overview */}
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {getStatusIcon(scoring.status)}
+                <div>
+                  <CardTitle className="text-2xl">
+                    Overall Readiness Score: {scoring.overall_score}%
+                  </CardTitle>
+                  <CardDescription>
+                    Status: <Badge className={getStatusColor(scoring.status)}>{scoring.status}</Badge>
+                    {scoring.critical_hit && (
+                      <Badge variant="destructive" className="ml-2">Critical Gap Detected</Badge>
+                    )}
+                  </CardDescription>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-muted-foreground mb-2">Assessment Date</div>
+                <div className="font-medium">
+                  {new Date(scoring.timestamp).toLocaleDateString()}
+                </div>
+              </div>
             </div>
-            <CardTitle className="text-2xl">
-              Readiness Score
-            </CardTitle>
           </CardHeader>
-          <CardContent className="text-center">
-            <div className="text-6xl font-bold mb-2 text-foreground">
-              {scoreResult.score}
+          <CardContent>
+            <Progress value={scoring.overall_score} className="h-4 mb-4" />
+            <div className="grid md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <span className="text-muted-foreground">Total Questions:</span>
+                <div className="font-medium">{responses.length}</div>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Total Weight:</span>
+                <div className="font-medium">{scoring.weights_summary.sum_weights}</div>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Score Obtained:</span>
+                <div className="font-medium">{Math.round(scoring.weights_summary.sum_obtained)}</div>
+              </div>
             </div>
-            <div className="text-lg text-muted-foreground mb-4">
-              out of 100
-            </div>
-            <Badge variant="secondary" className="text-sm px-4 py-1">
-              {config.title}
-            </Badge>
-            <p className="text-sm text-muted-foreground mt-3">
-              {config.description}
-            </p>
+            {scoring.engine_notes && (
+              <div className="mt-4 p-4 bg-muted rounded-md">
+                <p className="text-sm text-muted-foreground">
+                  <strong>Note:</strong> {scoring.engine_notes}
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        <div className="lg:col-span-2 grid gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendUp size={20} />
-                Assessment Summary
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Questions Answered</span>
-                <span className="font-semibold">{responses.length} / {assessmentQuestions.length}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Critical Failures</span>
-                <Badge variant={scoreResult.criticalFailures.length > 0 ? "destructive" : "secondary"}>
-                  {scoreResult.criticalFailures.length}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Priority Gaps Identified</span>
-                <span className="font-semibold">{scoreResult.gaps.length}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Compliance Maturity</span>
-                <Badge variant="outline" className="capitalize">
-                  {scoreResult.riskAssessment.complianceMaturity}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Risk Level</span>
-                <Badge variant={scoreResult.riskAssessment.overallRisk === 'critical' || scoreResult.riskAssessment.overallRisk === 'high' ? 'destructive' : 
-                  scoreResult.riskAssessment.overallRisk === 'medium' ? 'secondary' : 'outline'} 
-                  className="capitalize">
-                  {scoreResult.riskAssessment.overallRisk}
-                </Badge>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Overall Compliance</span>
-                  <span>{scoreResult.score}%</span>
-                </div>
-                <Progress value={scoreResult.score} className="h-2" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Weighted Performance</span>
-                  <span>{scoreResult.weightedBreakdown.totalPossibleWeight > 0 ? ((scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100).toFixed(1) : 0}%</span>
-                </div>
-                <Progress value={scoreResult.weightedBreakdown.totalPossibleWeight > 0 ? (scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100 : 0} className="h-1" />
-              </div>
-            </CardContent>
-          </Card>
-
-          {scoreResult.criticalFailures.length > 0 && (
-            <Card className="border-destructive/20 bg-destructive/5">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-destructive">
-                  <XCircle size={20} />
-                  Critical Compliance Failures
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-destructive mb-3">
-                  The following critical requirements must be addressed immediately:
-                </p>
-                <div className="space-y-2">
-                  {scoreResult.criticalFailures.map(failure => (
-                    <Badge key={failure} variant="destructive" className="mr-2">
-                      {failure}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </div>
-
-      {/* Detailed Results */}
-      <Tabs defaultValue="gaps" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="gaps" className="flex items-center gap-2">
-            <ClipboardText size={16} />
-            Gap Analysis
-          </TabsTrigger>
-          <TabsTrigger value="scoring" className="flex items-center gap-2">
-            <Calculator size={16} />
-            Scoring Details
-          </TabsTrigger>
-          <TabsTrigger value="capa" className="flex items-center gap-2">
-            <FileText size={16} />
-            CAPA Planning
-          </TabsTrigger>
-          <TabsTrigger value="interview" className="flex items-center gap-2">
-            <Users size={16} />
-            Interview Prep
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="gaps" className="space-y-4">
-          <Card>
+        {/* Top Gaps */}
+        {scoring.top_gaps.length > 0 && (
+          <Card className="mb-8">
             <CardHeader>
               <CardTitle>Priority Compliance Gaps</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Top {scoreResult.gaps.length} areas requiring attention, ranked by enhanced impact scoring
-              </p>
+              <CardDescription>
+                Areas requiring immediate attention to improve audit readiness
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              {scoreResult.gaps.length === 0 ? (
-                <div className="text-center py-8">
-                  <CheckCircle size={48} className="text-success mx-auto mb-4" />
-                  <h3 className="font-semibold text-success mb-2">No Critical Gaps Identified</h3>
-                  <p className="text-muted-foreground">
-                    Your assessment shows strong compliance across all evaluated areas.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {scoreResult.gaps.map((gap, index) => (
-                    <div key={gap.questionId} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <Badge variant="outline" className="font-mono">
-                            #{index + 1}
-                          </Badge>
-                          <div>
-                            <h4 className="font-semibold text-sm">{gap.clauseTitle}</h4>
-                            <p className="text-xs text-muted-foreground">{gap.clauseRef}</p>
-                          </div>
-                        </div>
+              <div className="space-y-4">
+                {scoring.top_gaps.map((gap, index) => (
+                  <div key={gap.question_id} className="flex items-start gap-4 p-4 border rounded-lg">
+                    <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="outline">{gap.clause_ref}</Badge>
                         <Badge variant="secondary">
                           Impact: {gap.deficit.toFixed(1)}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {gap.prompt}
+                      <p className="text-sm font-medium mb-1">{gap.label}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Regulatory Reference: {gap.clause_ref}
                       </p>
-                      {gap.suggestedEvidence.length > 0 && (
-                        <div>
-                          <p className="text-xs font-semibold text-foreground mb-2">
-                            Required Evidence:
-                          </p>
-                          <div className="flex flex-wrap gap-1">
-                            {gap.suggestedEvidence.slice(0, 3).map(evidence => (
-                              <Badge key={evidence} variant="outline" className="text-xs">
-                                {evidence}
-                              </Badge>
-                            ))}
-                            {gap.suggestedEvidence.length > 3 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{gap.suggestedEvidence.length - 3} more
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  ))}
-                </div>
-              )}
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        )}
 
-        <TabsContent value="scoring" className="space-y-4">
-          <ScoringExplanation scoreResult={scoreResult} filterOptions={filterOptions} />
-        </TabsContent>
+        {/* Artifacts Preview */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Generated Deliverables</CardTitle>
+            <CardDescription>
+              Professional audit preparation materials based on your assessment
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="gap_list" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="gap_list">Gap Analysis</TabsTrigger>
+                <TabsTrigger value="capa_plan">CAPA Plan</TabsTrigger>
+                <TabsTrigger value="interview_script">Interview Script</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="gap_list" className="mt-4">
+                <div className="bg-muted/50 p-4 rounded-md">
+                  <pre className="text-sm whitespace-pre-wrap overflow-auto max-h-64">
+                    {artifacts?.gap_list.substring(0, 500)}...
+                  </pre>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="capa_plan" className="mt-4">
+                <div className="bg-muted/50 p-4 rounded-md">
+                  <pre className="text-sm whitespace-pre-wrap overflow-auto max-h-64">
+                    {artifacts?.capa_plan.substring(0, 500)}...
+                  </pre>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="interview_script" className="mt-4">
+                <div className="bg-muted/50 p-4 rounded-md">
+                  <pre className="text-sm whitespace-pre-wrap overflow-auto max-h-64">
+                    {artifacts?.interview_script.substring(0, 500)}...
+                  </pre>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="capa" className="space-y-4">
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button onClick={handleExport} disabled={isExporting} size="lg">
+            {isExporting ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+            ) : (
+              <Download className="w-4 h-4 mr-2" />
+            )}
+            {isExporting ? 'Generating...' : 'Export Results (ZIP)'}
+          </Button>
+          <Button variant="outline" onClick={onRestartAssessment} size="lg">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            New Assessment
+          </Button>
+        </div>
+
+        {/* Interpretation Guide */}
+        <div className="mt-12">
           <Card>
             <CardHeader>
-              <CardTitle>CAPA Planning Guidance</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Systematic approach to addressing identified gaps through corrective and preventive actions
-              </p>
+              <CardTitle>Score Interpretation Guide</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-semibold mb-2">Immediate Actions</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Document current state of identified gaps</li>
-                      <li>• Implement temporary risk controls</li>
-                      <li>• Assign ownership for each gap</li>
-                      <li>• Establish timeline for resolution</li>
-                    </ul>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <CheckCircle className="w-6 h-6 text-success" />
                   </div>
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-semibold mb-2">Long-term Strategy</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Develop systematic processes</li>
-                      <li>• Implement ongoing monitoring</li>
-                      <li>• Establish performance metrics</li>
-                      <li>• Plan effectiveness verification</li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="bg-muted/50 rounded-lg p-4">
+                  <h3 className="font-semibold text-success mb-2">Green (85%+)</h3>
                   <p className="text-sm text-muted-foreground">
-                    <strong>Note:</strong> The exported CAPA plan includes detailed templates with 
-                    5-Whys root cause analysis, specific actions for each gap, and verification methods.
+                    Strong audit readiness with minor improvement opportunities
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-warning/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Clock className="w-6 h-6 text-warning" />
+                  </div>
+                  <h3 className="font-semibold text-warning mb-2">Amber (70-84%)</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Moderate readiness requiring focused improvement efforts
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-destructive/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <AlertTriangle className="w-6 h-6 text-destructive" />
+                  </div>
+                  <h3 className="font-semibold text-destructive mb-2">Red (&lt;70%)</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Significant gaps requiring immediate remediation
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="interview" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Audit Interview Preparation</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Role-based question sets to help your team prepare for regulatory interviews
-              </p>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Management Interviews</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Quality policy and objectives</li>
-                    <li>• Resource allocation decisions</li>
-                    <li>• Management review effectiveness</li>
-                    <li>• Strategic quality planning</li>
-                  </ul>
-                </div>
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Technical Interviews</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Design control implementation</li>
-                    <li>• Process validation evidence</li>
-                    <li>• Risk management activities</li>
-                    <li>• CAPA system operation</li>
-                  </ul>
-                </div>
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Quality Assurance</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Monitoring and measurement</li>
-                    <li>• Nonconforming product control</li>
-                    <li>• Internal audit program</li>
-                    <li>• Document control systems</li>
-                  </ul>
-                </div>
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Production Teams</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Process control procedures</li>
-                    <li>• Material handling practices</li>
-                    <li>• Equipment calibration</li>
-                    <li>• Training and competency</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-        <Button onClick={handleExport} size="lg" className="flex items-center gap-2">
-          <Download size={20} />
-          Export Assessment Package
-        </Button>
-        {onShowAuditChecklist && filterOptions.riskClassification && (
-          <Button 
-            onClick={onShowAuditChecklist} 
-            size="lg" 
-            variant="secondary"
-            className="flex items-center gap-2"
-          >
-            <CheckSquare size={20} />
-            View Audit Checklist
-          </Button>
-        )}
-        {onShowInterviewSimulation && (
-          <Button 
-            onClick={onShowInterviewSimulation} 
-            size="lg" 
-            variant="secondary"
-            className="flex items-center gap-2"
-          >
-            <MessageCircle size={20} />
-            Practice Interview Questions
-          </Button>
-        )}
-        {onShowTeamTraining && (
-          <Button 
-            onClick={onShowTeamTraining} 
-            size="lg" 
-            variant="secondary"
-            className="flex items-center gap-2"
-          >
-            <Users size={20} />
-            Start Team Training
-          </Button>
-        )}
-        <Button 
-          variant="outline" 
-          onClick={onRestartAssessment} 
-          size="lg" 
-          className="flex items-center gap-2"
-        >
-          <ArrowClockwise size={20} />
-          New Assessment
-        </Button>
+        </div>
       </div>
     </div>
   );

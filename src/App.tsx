@@ -1,61 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { Toaster } from '@/components/ui/sonner';
 import { HomePage } from './components/HomePage';
 import { QuestionnairePage } from './components/QuestionnairePage';
 import { ResultsPage } from './components/ResultsPage';
-import { AuditChecklist } from './components/AuditChecklist';
-import { InterviewSimulation } from './components/InterviewSimulation';
-import { TeamTrainingPage } from './components/TeamTrainingPage';
-import { AssessmentResponse, FilterOptions } from './lib/types';
+import { AssessmentResponse } from './lib/types';
 
-type AppState = 'home' | 'questionnaire' | 'results' | 'checklist' | 'interview' | 'team_training';
+type AppState = 'home' | 'questionnaire' | 'results';
 
 function App() {
-  const [currentPage, setCurrentPage] = useKV<AppState>('currentPage', 'home');
-  const [responses, setResponses] = useKV<AssessmentResponse[]>('responses', []);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useKV<number>('currentQuestionIndex', 0);
-  const [filterOptions, setFilterOptions] = useKV<FilterOptions>('filterOptions', {
-    selectedFrameworks: [],
-    includeAllFrameworks: true
-  });
+  const [currentPage, setCurrentPage] = useKV<AppState>('audit_sim_page', 'home');
+  const [responses, setResponses] = useKV<AssessmentResponse[]>('audit_sim_responses', []);
 
-  const handleStartAssessment = (newFilterOptions: FilterOptions) => {
-    setFilterOptions(() => newFilterOptions);
+  const handleStartAssessment = () => {
     setResponses(() => []);
-    setCurrentQuestionIndex(() => 0);
     setCurrentPage(() => 'questionnaire');
   };
 
-  const handleQuestionnaireComplete = (finalResponses: AssessmentResponse[]) => {
+  const handleAssessmentComplete = (finalResponses: AssessmentResponse[]) => {
     setResponses(() => finalResponses);
-    setCurrentPage(() => 'results');
-  };
-
-  const handleShowAuditChecklist = () => {
-    setCurrentPage(() => 'checklist');
-  };
-
-  const handleShowInterviewSimulation = () => {
-    setCurrentPage(() => 'interview');
-  };
-
-  const handleShowTeamTraining = () => {
-    setCurrentPage(() => 'team_training');
-  };
-
-  const handleBackToResults = () => {
     setCurrentPage(() => 'results');
   };
 
   const handleRestartAssessment = () => {
     setResponses(() => []);
-    setCurrentQuestionIndex(() => 0);
-    setFilterOptions(() => ({
-      selectedFrameworks: [],
-      includeAllFrameworks: true
-    }));
     setCurrentPage(() => 'home');
+  };
+
+  const handleBackToResults = () => {
+    setCurrentPage(() => 'results');
   };
 
   return (
@@ -67,41 +40,13 @@ function App() {
         <QuestionnairePage
           responses={responses || []}
           setResponses={setResponses}
-          currentQuestionIndex={currentQuestionIndex || 0}
-          setCurrentQuestionIndex={setCurrentQuestionIndex}
-          onComplete={handleQuestionnaireComplete}
-          filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
+          onComplete={handleAssessmentComplete}
         />
       )}
       {currentPage === 'results' && (
         <ResultsPage
           responses={responses || []}
           onRestartAssessment={handleRestartAssessment}
-          onShowAuditChecklist={handleShowAuditChecklist}
-          onShowInterviewSimulation={handleShowInterviewSimulation}
-          onShowTeamTraining={handleShowTeamTraining}
-          filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
-        />
-      )}
-      {currentPage === 'checklist' && filterOptions?.riskClassification && (
-        <AuditChecklist
-          deviceCategory={filterOptions.riskClassification.deviceCategory || 'diagnostic'}
-          riskClass={filterOptions.riskClassification.fdaClass || filterOptions.riskClassification.euClass || 'Class II'}
-          frameworks={filterOptions.selectedFrameworks || ['ISO_13485', 'CFR_820']}
-          onBack={handleBackToResults}
-        />
-      )}
-      {currentPage === 'interview' && (
-        <InterviewSimulation
-          responses={responses || []}
-          filterOptions={filterOptions || { selectedFrameworks: [], includeAllFrameworks: true }}
-          onBack={handleBackToResults}
-        />
-      )}
-      {currentPage === 'team_training' && filterOptions && (
-        <TeamTrainingPage
-          filterOptions={filterOptions}
-          onBack={handleBackToResults}
         />
       )}
       <Toaster />

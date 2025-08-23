@@ -1,192 +1,119 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { RegulatoryFrameworkFilter } from '@/components/RegulatoryFrameworkFilter';
-import { RiskClassificationSelector } from '@/components/RiskClassificationSelector';
-import { FilterOptions, RegulatoryFramework, RiskClassification } from '@/lib/types';
-import { CheckCircle, Warning, FileText, Shield } from '@phosphor-icons/react';
+import { Shield, FileText, Users, AlertTriangle } from '@phosphor-icons/react';
 
 interface HomePageProps {
-  onStartAssessment: (filterOptions: FilterOptions) => void;
+  onStartAssessment: () => void;
 }
 
 export function HomePage({ onStartAssessment }: HomePageProps) {
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
-    selectedFrameworks: [],
-    includeAllFrameworks: true
-  });
-
-  const canStartAssessment = filterOptions.includeAllFrameworks || filterOptions.selectedFrameworks.length > 0;
-
-  const handleRiskClassificationChange = (riskClassification: RiskClassification) => {
-    setFilterOptions(current => ({
-      ...current,
-      riskClassification
-    }));
-  };
-
-  const handleStartAssessment = () => {
-    if (canStartAssessment) {
-      onStartAssessment(filterOptions);
-    }
-  };
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <div className="text-center mb-12">
-        <div className="flex justify-center mb-6">
-          <div className="bg-primary/10 p-4 rounded-full">
-            <Shield size={48} className="text-primary" />
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+      <div className="container mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
+            <Shield className="w-8 h-8 text-primary-foreground" />
           </div>
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            Medical Device Audit Readiness Assessment
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Evaluate your ISO 13485 and 21 CFR 820 compliance readiness with our comprehensive assessment tool
+          </p>
         </div>
-        <h1 className="text-4xl font-bold text-foreground mb-4">
-          Medical Device Audit Readiness Assessment
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Evaluate your organization's compliance readiness and identify critical gaps 
-          before your next regulatory audit.
-        </p>
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle size={24} className="text-success" />
-              Comprehensive Assessment
-            </CardTitle>
-            <CardDescription>
-              40 carefully crafted questions covering ISO 13485, 21 CFR 820, MDR, and ISO 14155 requirements
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-sm">
-              <li>• Design controls and risk management</li>
-              <li>• Process validation and CAPA systems</li>
-              <li>• Post-market surveillance and clinical follow-up</li>
-              <li>• MDR compliance and UDI implementation</li>
-              <li>• Clinical investigation protocols (ISO 14155)</li>
-              <li>• Documentation and record keeping</li>
-            </ul>
-          </CardContent>
-        </Card>
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-2">
+                <FileText className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle>Comprehensive Assessment</CardTitle>
+              <CardDescription>
+                20 structured questions covering key regulatory requirements
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Quality Management System</li>
+                <li>• Design Controls</li>
+                <li>• CAPA System</li>
+                <li>• Risk Management</li>
+              </ul>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText size={24} className="text-primary" />
-              Actionable Deliverables
-            </CardTitle>
-            <CardDescription>
-              Professional reports to guide your audit preparation
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-sm">
-              <li>• Prioritized gap analysis with regulatory references</li>
-              <li>• Structured CAPA plan with root cause analysis</li>
-              <li>• Role-based audit interview preparation scripts</li>
-              <li>• Complete assessment data export package</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-2">
+                <AlertTriangle className="w-6 h-6 text-accent" />
+              </div>
+              <CardTitle>Intelligent Scoring</CardTitle>
+              <CardDescription>
+                Weighted assessment with critical gap detection
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• 0-100 readiness score</li>
+                <li>• RAG status classification</li>
+                <li>• Critical gap identification</li>
+                <li>• Priority gap ranking</li>
+              </ul>
+            </CardContent>
+          </Card>
 
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Assessment Process</CardTitle>
-          <CardDescription>
-            Complete the evaluation in approximately 20-25 minutes
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="flex flex-col items-center text-center p-4">
-              <div className="bg-primary/10 p-3 rounded-full mb-3">
-                <span className="text-lg font-bold text-primary">1</span>
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center mb-2">
+                <Users className="w-6 h-6 text-success" />
               </div>
-              <h3 className="font-semibold mb-2">Answer Questions</h3>
-              <p className="text-sm text-muted-foreground">
-                Respond to 40 regulatory compliance questions based on your current practices
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center p-4">
-              <div className="bg-primary/10 p-3 rounded-full mb-3">
-                <span className="text-lg font-bold text-primary">2</span>
-              </div>
-              <h3 className="font-semibold mb-2">Review Score</h3>
-              <p className="text-sm text-muted-foreground">
-                Get your readiness score with Red/Amber/Green risk assessment and gap analysis
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center p-4">
-              <div className="bg-primary/10 p-3 rounded-full mb-3">
-                <span className="text-lg font-bold text-primary">3</span>
-              </div>
-              <h3 className="font-semibold mb-2">Export Reports</h3>
-              <p className="text-sm text-muted-foreground">
-                Download professional documentation package for your audit preparation
-              </p>
-            </div>
+              <CardTitle>Professional Deliverables</CardTitle>
+              <CardDescription>
+                Export-ready audit preparation materials
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Gap analysis report</li>
+                <li>• CAPA plan template</li>
+                <li>• Interview preparation script</li>
+                <li>• Export ZIP package</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Call to Action */}
+        <div className="text-center">
+          <Card className="max-w-md mx-auto">
+            <CardHeader>
+              <CardTitle>Ready to Start?</CardTitle>
+              <CardDescription>
+                Complete the assessment in approximately 15-20 minutes
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={onStartAssessment} size="lg" className="w-full">
+                Begin Assessment
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-16 text-center">
+          <div className="bg-muted/50 rounded-lg p-6 max-w-3xl mx-auto">
+            <h3 className="font-semibold mb-2 text-foreground">Important Disclaimer</h3>
+            <p className="text-sm text-muted-foreground">
+              This assessment tool is for educational and planning purposes only. It does not constitute 
+              legal or regulatory advice. Results should not be considered as definitive compliance 
+              statements. Always consult with qualified regulatory professionals for authoritative 
+              guidance on medical device compliance requirements.
+            </p>
           </div>
-        </CardContent>
-      </Card>
-
-      <RegulatoryFrameworkFilter
-        filterOptions={filterOptions}
-        onFilterChange={setFilterOptions}
-        className="mb-8"
-      />
-
-      <RiskClassificationSelector
-        value={filterOptions.riskClassification}
-        onChange={handleRiskClassificationChange}
-      />
-
-      <Card className="border-warning/50 bg-warning/5 mb-8 mt-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-warning-foreground">
-            <Warning size={24} className="text-warning" />
-            Important Disclaimer
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-warning-foreground space-y-2">
-          <p>
-            This assessment tool is designed for <strong>educational purposes only</strong> and provides 
-            general guidance on regulatory compliance readiness.
-          </p>
-          <p>
-            <strong>This is not legal or regulatory advice.</strong> Results should not be considered 
-            a substitute for professional regulatory consultation or formal compliance assessment by 
-            qualified experts.
-          </p>
-          <p>
-            Always consult with regulatory professionals and legal counsel for specific compliance 
-            requirements applicable to your organization and products.
-          </p>
-        </CardContent>
-      </Card>
-
-      <div className="text-center">
-        <Button 
-          onClick={handleStartAssessment} 
-          size="lg" 
-          className="px-8 py-3 text-lg"
-          disabled={!canStartAssessment}
-        >
-          Begin Assessment
-        </Button>
-        {!canStartAssessment && (
-          <p className="text-sm text-muted-foreground mt-2">
-            Please select at least one regulatory framework to continue
-          </p>
-        )}
-        <div className="mt-4 flex justify-center gap-4">
-          <Badge variant="outline">ISO 13485</Badge>
-          <Badge variant="outline">21 CFR 820</Badge>
-          <Badge variant="outline">MDR</Badge>
-          <Badge variant="outline">ISO 14155</Badge>
-          <Badge variant="outline">20-25 minutes</Badge>
         </div>
       </div>
     </div>

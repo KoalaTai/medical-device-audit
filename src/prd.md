@@ -1,166 +1,136 @@
-# Medical Device Audit Readiness Assessment - Product Requirements Document
+# Medical Device Audit Simulation Pilot Kit - Product Requirements Document
 
 ## Core Purpose & Success
 
-**Mission Statement**: Provide medical device manufacturers with a comprehensive, professional-grade audit readiness assessment that identifies critical compliance gaps and generates actionable deliverables for regulatory audit preparation.
+**Mission Statement**: Provide medical device manufacturers with a practical tool to assess their ISO 13485 and 21 CFR 820 compliance readiness and generate actionable audit preparation artifacts.
 
-**Success Indicators**:
-- Users can complete a 40-question assessment covering multiple regulatory frameworks in 20-25 minutes
-- System generates accurate readiness scores with Red/Amber/Green risk classification
-- Professional deliverables (gap analysis, CAPA plan, interview scripts) are exported with appropriate regulatory framework references
-- Clear identification of critical failures across ISO 13485, 21 CFR 820, MDR, and ISO 14155 requirements
+**Success Indicators**: 
+- Users can complete a comprehensive compliance assessment in under 30 minutes
+- Generated artifacts directly support audit preparation activities
+- Scoring engine provides accurate readiness assessment with clear improvement pathways
 
-**Experience Qualities**: Professional, Authoritative, Reliable
+**Experience Qualities**: Professional, Trustworthy, Educational
 
 ## Project Classification & Approach
 
-**Complexity Level**: Light Application (multiple features with persistent state)
+**Complexity Level**: Light Application (multiple features with basic state management)
 
-**Primary User Activity**: Interacting (assessment completion) → Creating (deliverable generation)
+**Primary User Activity**: Acting (completing assessments, generating reports, exporting deliverables)
 
 ## Thought Process for Feature Selection
 
-**Core Problem Analysis**: Medical device manufacturers need systematic evaluation of their audit readiness with professional outputs to guide preparation activities.
+**Core Problem Analysis**: Medical device manufacturers need to assess their compliance readiness for regulatory audits but lack accessible tools to identify gaps and generate structured preparation materials.
 
-**User Context**: Quality managers, regulatory affairs professionals, and consultants preparing for FDA, Notified Body, competent authority, or other regulatory audits across global markets including EU, US, and international jurisdictions.
+**User Context**: Quality managers, regulatory affairs professionals, and compliance teams preparing for FDA or ISO audits who need systematic assessment and documentation.
 
-**Critical Path**: Home → Assessment → Results → Export
+**Critical Path**: Assessment → Scoring → Gap Analysis → Artifact Generation → Export
 
-**Key Moments**: 
-1. Starting the assessment with confidence in the tool's credibility
-2. Receiving the readiness score and understanding the risk classification
-3. Exporting professional documentation packages
+**Key Moments**:
+1. Initial assessment completion with immediate scoring feedback
+2. Gap analysis revelation showing specific compliance deficiencies  
+3. Artifact generation providing actionable deliverables
 
 ## Essential Features
 
-### 1. Comprehensive Assessment Questionnaire with Framework Filtering
-- **What it does**: 40 carefully crafted questions covering ISO 13485, 21 CFR 820, MDR (Medical Device Regulation), and ISO 14155 (Clinical Investigation) requirements with the ability to focus on specific regulatory frameworks
-- **Why it matters**: Provides systematic evaluation of critical regulatory compliance areas across multiple international frameworks while allowing focused assessments for specific market requirements
-- **Success criteria**: Users can select specific frameworks or complete comprehensive assessment, with filtered questions maintaining relevance and regulatory accuracy
+### 1. Interactive Questionnaire (20-30 items)
+- **What it does**: Presents structured questions mapped to specific regulatory clauses
+- **Why it matters**: Systematic assessment ensures comprehensive coverage of critical compliance areas
+- **Success criteria**: All questions completed with proper clause mapping and scoring weights
 
-### 2. Intelligent Scoring Engine with Risk-Based Weighting
-- **What it does**: Calculates weighted readiness score (0-100) with device risk classification adjustments, critical failure logic, and Red/Amber/Green status
-- **Why it matters**: Provides objective, defensible risk assessment that reflects actual regulatory burden based on device classification and characteristics
-- **Success criteria**: Scores accurately reflect compliance posture with appropriate risk multipliers for different device classes, and critical gaps are properly flagged
+### 2. Intelligent Scoring Engine
+- **What it does**: Calculates weighted compliance scores with critical gap detection
+- **Why it matters**: Provides objective readiness assessment with clear risk stratification
+- **Success criteria**: Accurate 0-100 scoring with proper RAG status (Red <70, Amber 70-84, Green ≥85)
 
-### 3. Professional Deliverables Generation
-- **What it does**: Creates gap analysis, CAPA plan, and audit interview scripts in markdown format
-- **Why it matters**: Provides actionable, professional documentation for audit preparation
-- **Success criteria**: Documents are comprehensive, well-formatted, and immediately usable
+### 3. Automated Artifact Generation
+- **What it does**: Creates professional audit preparation documents (gap list, CAPA plan, interview scripts)
+- **Why it matters**: Transforms assessment results into actionable compliance deliverables
+- **Success criteria**: Generated markdown documents are audit-ready and professionally formatted
 
-### 4. Team Training Mode with Collaborative Assessment
-- **What it does**: Multi-participant training sessions with role-based perspectives, consensus building, and team dynamics analysis
-- **Why it matters**: Enables organizations to prepare audit teams collaboratively, understanding different role perspectives and improving team readiness
-- **Success criteria**: Teams can complete assessments together, reach consensus on answers, and receive analysis of team effectiveness and individual contributions
-
-### 5. Role-Based Interview Simulation
-- **What it does**: Interactive interview preparation with role-specific questions and team coordination guidelines
-- **Why it matters**: Prepares teams for actual audit interviews with realistic scenarios and role clarity
-- **Success criteria**: Teams understand their roles, practice coordination, and gain confidence in audit situations
-
-### 4. Export Package System
-- **What it does**: Bundles all deliverables with assessment data for download
-- **Why it matters**: Enables professional documentation and record keeping
-- **Success criteria**: Clean file downloads with timestamped naming convention and framework-specific content
-
-### 5. Device Risk Classification System
-- **What it does**: Allows users to specify their device risk classification (FDA Class I/II/III, EU Class I/IIa/IIb/III) and characteristics (sterile, measuring, active components, drug-device combination) to adjust scoring weights
-- **Why it matters**: Higher risk devices have proportionally greater regulatory burden and compliance requirements - scoring should reflect this reality
-- **Success criteria**: Risk classification multipliers appropriately adjust question weights and scoring thresholds based on device classification
-
-### 6. Category-Specific Audit Checklists and Preparation Guides
-- **What it does**: Provides targeted audit preparation checklists for different device categories (surgical, diagnostic, therapeutic) and risk classes with estimated time requirements, common pitfalls, and actionable tips
-- **Why it matters**: Each device category has unique regulatory requirements and audit focus areas - generic preparation is insufficient for thorough audit readiness
-- **Success criteria**: Checklists filter appropriately by device category and risk class, provide realistic time estimates, include framework-specific guidance, and track completion progress
-
-### 7. Regulatory Inspector Interview Simulation
-- **What it does**: Interactive interview practice sessions with role-based questions (Lead Inspector, Quality Specialist, Technical Reviewer, Compliance Officer), expected responses, follow-up questions, common mistakes, and confidence scoring
-- **Why it matters**: Regulatory interviews are often the most critical and unpredictable part of audits - proper preparation through realistic practice significantly improves audit outcomes and reduces anxiety
-- **Success criteria**: Questions are tailored based on assessment gaps, multiple inspector roles are represented, practice sessions include realistic follow-ups, expected answers provide clear guidance, progress tracking shows confidence scores and improvement areas
-
-### 8. Regulatory Framework Filtering
-- **What it does**: Allows users to select specific regulatory frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) to focus their assessment and preparation activities
-- **Why it matters**: Enables targeted compliance evaluation for specific markets, reducing assessment time and increasing relevance
-- **Success criteria**: Questions filter accurately based on framework selection, scores reflect only relevant requirements, exports include framework context, checklists show applicable regulatory requirements
+### 4. Export and CLI Functionality
+- **What it does**: Packages results as downloadable ZIP files with both UI and command-line access
+- **Why it matters**: Supports various workflows and integration needs
+- **Success criteria**: Identical outputs via UI and CLI with complete artifact packages
 
 ## Design Direction
 
 ### Visual Tone & Identity
-**Emotional Response**: Trust, competence, professionalism, and regulatory authority
-**Design Personality**: Clean, medical-grade precision with enterprise software reliability
-**Visual Metaphors**: Medical device quality systems, regulatory documentation, professional certification
-**Simplicity Spectrum**: Structured complexity - rich in information but clearly organized
+**Emotional Response**: Confidence, Competence, Reliability
+**Design Personality**: Professional, Clinical, Trustworthy - reflecting medical device industry standards
+**Visual Metaphors**: Clinical documentation, regulatory frameworks, audit checklists
+**Simplicity Spectrum**: Clean, structured interface prioritizing clarity and professional appearance
 
 ### Color Strategy
-**Color Scheme Type**: Professional triad with regulatory status colors
-**Primary Color**: Deep blue (oklch(0.45 0.15 240)) - representing trust and regulatory authority
-**Secondary Colors**: 
-- Clean greys for professional neutrality
-- Success green for compliance achievements
-- Warning amber for medium risk areas
-- Destructive red for critical failures
-**Color Psychology**: Colors reinforce regulatory status meanings (Red/Amber/Green) that users expect
-**Foreground/Background Pairings**: High contrast ratios ensuring WCAG AA compliance for professional readability
+**Color Scheme Type**: Professional monochromatic with strategic accent colors
+**Primary Color**: Deep regulatory blue (oklch(0.35 0.15 240)) - conveying trust and authority
+**Secondary Colors**: Neutral grays for content hierarchy
+**Accent Color**: Strategic orange (oklch(0.65 0.18 45)) for CTAs and important actions
+**Color Psychology**: Blue establishes trust and compliance authority, orange drives action
+**Color Accessibility**: All combinations meet WCAG AA standards (4.5:1 contrast minimum)
+
+**Foreground/Background Pairings**:
+- Background (white): Dark blue text (4.8:1 contrast)
+- Card backgrounds (light gray): Dark blue text (5.2:1 contrast) 
+- Primary buttons (deep blue): White text (7.1:1 contrast)
+- Secondary buttons (light gray): Dark text (4.9:1 contrast)
+- Accent buttons (orange): White text (4.6:1 contrast)
 
 ### Typography System
-**Font Pairing Strategy**: Single professional typeface family (Inter) for consistency and readability
-**Typographic Hierarchy**: Clear distinction between headings, body text, and technical references
-**Font Personality**: Clean, precise, highly legible - suitable for technical documentation
-**Which fonts**: Inter - excellent for UI, professional appearance, high legibility
+**Font Pairing Strategy**: Single professional sans-serif family with multiple weights
+**Typographic Hierarchy**: Clear distinction between headings (600-700 weight), body text (400 weight), and captions (400 weight, smaller)
+**Font Personality**: Clean, readable, professional - suitable for technical documentation
+**Readability Focus**: Generous line spacing (1.5x), optimal line length (45-75 characters)
+**Which fonts**: Inter - excellent readability and professional appearance
+**Legibility Check**: Inter provides excellent legibility across all sizes and weights
 
 ### Visual Hierarchy & Layout
-**Attention Direction**: Progressive disclosure from overview to detailed assessment to actionable results
-**White Space Philosophy**: Generous spacing to reduce cognitive load during lengthy assessment
-**Component Hierarchy**: Clear primary/secondary button distinction for navigation flow
+**Attention Direction**: Progressive disclosure with clear visual hierarchy guiding users through assessment process
+**White Space Philosophy**: Generous spacing creating focused, uncluttered interface appropriate for professional use
+**Grid System**: Consistent 12-column grid with standardized spacing units
+**Responsive Approach**: Mobile-first design adapting gracefully to desktop workflows
+**Content Density**: Balanced information presentation avoiding cognitive overload
 
 ### Animations
-**Purposeful Meaning**: Subtle progress indication and state transitions to maintain professional feel
-**Contextual Appropriateness**: Minimal, functional animations that support rather than distract
+**Purposeful Meaning**: Subtle transitions reinforcing progress and completion states
+**Hierarchy of Movement**: Progress indicators and state transitions receive priority
+**Contextual Appropriateness**: Minimal, professional motion suitable for business context
 
 ### UI Elements & Component Selection
-**Component Usage**:
-- Cards for content organization and visual grouping
-- Progress bars for assessment completion tracking
-- Tabs for organizing complex results data
-- Badges for status indicators and regulatory references
-- Buttons with clear primary/secondary hierarchy
+**Component Usage**: Cards for content sections, progress bars for assessment tracking, badges for status indicators
+**Component Customization**: Professional styling with regulatory industry appropriate colors and spacing
+**Component States**: Clear hover, active, and disabled states for all interactive elements
+**Icon Selection**: Professional iconography focusing on assessment, documentation, and export actions
+**Mobile Adaptation**: Responsive layouts maintaining professional appearance across devices
 
-**Component States**: Professional hover and focus states that maintain accessibility
-**Mobile Adaptation**: Responsive design ensuring usability on tablets during audits
+### Accessibility & Readability
+**Contrast Goal**: WCAG AA compliance minimum with preference for AAA where feasible
 
 ## Edge Cases & Problem Scenarios
 
 **Potential Obstacles**: 
-- Users abandoning lengthy assessment
-- Confusion about regulatory terminology
-- Misunderstanding risk scoring methodology
+- Users may not understand regulatory terminology
+- Complex scoring logic needs to be transparent
+- Generated artifacts must be professionally acceptable
 
 **Edge Case Handling**:
-- Progress persistence across sessions
-- Clear regulatory clause explanations
-- Transparent scoring methodology disclosure
+- Comprehensive help text and clause explanations
+- Clear scoring methodology documentation
+- Professional document templates with disclaimer language
 
-**Technical Constraints**: Browser-based export limitations (no server-side ZIP generation)
+**Technical Constraints**: Local-only operation, no external dependencies, browser compatibility
 
 ## Implementation Considerations
 
-**Scalability Needs**: 
-- Modular question/standards mapping for different regulatory frameworks - now includes ISO 13485, 21 CFR 820, MDR, and ISO 14155 with expandable architecture for future regulations
-- Expandable checklist system that can accommodate new device categories and risk classifications
-- Preparation guide framework that scales to different regulatory environments and audit types
-
-**Testing Focus**: 
-- Scoring algorithm accuracy and data persistence reliability
-- Checklist filtering accuracy across device categories and risk classes
-- Progress tracking functionality for checklist completion
-
-**Critical Questions**: 
-- Ensuring professional credibility while maintaining educational disclaimer
-- Balancing comprehensive checklist coverage with practical time constraints
-- Maintaining regulatory accuracy across multiple international frameworks
+**Scalability Needs**: Modular architecture supporting additional regulatory frameworks
+**Testing Focus**: Scoring algorithm accuracy, artifact generation quality, export functionality
+**Critical Questions**: Regulatory disclaimer adequacy, scoring weight validation, professional document standards
 
 ## Reflection
 
-This approach uniquely combines regulatory expertise across multiple international frameworks (ISO 13485, 21 CFR 820, MDR, ISO 14155) with modern web application UX, providing immediate professional value while maintaining appropriate disclaimers. The systematic scoring approach and professional deliverables distinguish this from generic assessment tools, making it specifically valuable for comprehensive medical device audit preparation across global regulatory environments.
+This approach uniquely combines systematic compliance assessment with practical deliverable generation, filling a specific gap in medical device regulatory preparation tools. The focus on local operation and professional artifact generation makes it suitable for regulated environments with data security requirements.
 
-The addition of category-specific audit checklists and preparation guides transforms this from a simple assessment tool into a comprehensive audit preparation platform. By providing targeted, actionable checklists with time estimates and common pitfalls, the system guides users through structured preparation activities that are tailored to their specific device type and regulatory requirements. The integration between assessment results and preparation activities creates a seamless workflow from evaluation to execution.
+**Key Assumptions Made**:
+1. Users have basic regulatory knowledge but need structured assessment guidance
+2. Professional markdown documents are acceptable primary format with optional PDF conversion
+3. Local operation is preferred over cloud-based solutions for compliance data
+4. Standard regulatory frameworks (ISO 13485, 21 CFR 820) provide sufficient coverage

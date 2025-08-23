@@ -1,0 +1,25 @@
+# Sample Assessment Responses
+
+This CSV file contains sample responses that can be used to test the scoring engine and artifact generation.
+
+question_id,value,timestamp
+Q1,true,2024-01-15T10:00:00Z
+Q2,true,2024-01-15T10:01:00Z
+Q3,Comprehensive system,2024-01-15T10:02:00Z
+Q4,true,2024-01-15T10:03:00Z
+Q5,4,2024-01-15T10:04:00Z
+Q6,true,2024-01-15T10:05:00Z
+Q7,Systematic approach,2024-01-15T10:06:00Z
+Q8,true,2024-01-15T10:07:00Z
+Q9,true,2024-01-15T10:08:00Z
+Q10,Basic monitoring,2024-01-15T10:09:00Z
+Q11,false,2024-01-15T10:10:00Z
+Q12,true,2024-01-15T10:11:00Z
+Q13,3,2024-01-15T10:12:00Z
+Q14,true,2024-01-15T10:13:00Z
+Q15,Systematic process,2024-01-15T10:14:00Z
+Q16,true,2024-01-15T10:15:00Z
+Q17,true,2024-01-15T10:16:00Z
+Q18,Good controls,2024-01-15T10:17:00Z
+Q19,true,2024-01-15T10:18:00Z
+Q20,4,2024-01-15T10:19:00Z
