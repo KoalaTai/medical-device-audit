@@ -2,52 +2,111 @@ import { ScoreResult, AssessmentResponse, ExportData, FilterOptions } from './ty
 import { frameworkLabels } from './data';
 
 export function generateGapAnalysis(scoreResult: ScoreResult, filterOptions?: FilterOptions): string {
-  const { score, status, gaps, criticalFailures } = scoreResult;
+  const { score, status, gaps, criticalFailures, weightedBreakdown, riskAssessment, frameworkScores } = scoreResult;
   
   const statusText = status === 'red' ? 'RED - HIGH RISK' : 
                     status === 'amber' ? 'AMBER - MEDIUM RISK' : 
                     'GREEN - LOW RISK';
 
-  let analysis = `# Gap Analysis Report
+  let analysis = `# Enhanced Gap Analysis Report
 
-## Assessment Summary
+## Executive Summary
 
 **Assessment Type:** ${filterOptions?.includeAllFrameworks ? 'Comprehensive Assessment (All Frameworks)' : 'Focused Assessment'}  
 ${!filterOptions?.includeAllFrameworks ? `**Selected Frameworks:** ${filterOptions?.selectedFrameworks.map(f => frameworkLabels[f]).join(', ') || 'Not specified'}  
 ` : ''}**Overall Readiness Score:** ${score}/100  
 **Risk Status:** ${statusText}  
 **Critical Failures:** ${criticalFailures.length}  
+**Compliance Maturity:** ${riskAssessment.complianceMaturity.charAt(0).toUpperCase() + riskAssessment.complianceMaturity.slice(1)}  
+**Overall Risk Level:** ${riskAssessment.overallRisk.charAt(0).toUpperCase() + riskAssessment.overallRisk.slice(1)}  
+
+## Weighted Scoring Analysis
+
+**Total Weighted Score:** ${weightedBreakdown.actualWeightedScore.toFixed(1)} / ${weightedBreakdown.totalPossibleWeight.toFixed(1)}  
+**Critical Impact Penalty:** -${weightedBreakdown.criticalImpact}%  
+**Effective Score:** ${((weightedBreakdown.actualWeightedScore / weightedBreakdown.totalPossibleWeight) * 100).toFixed(1)}%  
+
+### Category Performance Breakdown
+
+| Category | Weight | Score | Performance | Status |
+|----------|--------|-------|-------------|---------|
+`;
+
+  weightedBreakdown.weightingFactors.forEach(factor => {
+    const statusEmoji = factor.performance >= 80 ? 'PASS' : factor.performance >= 70 ? 'WARN' : 'FAIL';
+    analysis += `| ${factor.category} | ${factor.weight.toFixed(1)} | ${factor.actualScore.toFixed(1)}/${factor.maxScore.toFixed(1)} | ${factor.performance.toFixed(1)}% | ${statusEmoji} |\n`;
+  });
+
+  analysis += `
 
 `;
 
   if (criticalFailures.length > 0) {
-    analysis += `### ⚠️ Critical Compliance Gaps
+    analysis += `### Critical Compliance Gaps
 
 The following critical regulatory requirements have failed and must be addressed immediately:
 
 ${criticalFailures.map(id => `- Question ${id}: Critical compliance requirement not met`).join('\n')}
+
+**Risk Impact:** These failures automatically elevate the overall risk assessment and cap the maximum achievable score.
 
 ---
 
 `;
   }
 
+  // Risk Assessment Section
+  if (riskAssessment.riskFactors.length > 0) {
+    analysis += `## Risk Assessment
+
+`;
+    riskAssessment.riskFactors.forEach((factor, index) => {
+      analysis += `### Risk Factor ${index + 1}: ${factor.type.replace('_', ' ').toUpperCase()}
+**Description:** ${factor.description}  
+**Impact:** ${factor.impact}%  
+**Likelihood:** ${factor.likelihood.charAt(0).toUpperCase() + factor.likelihood.slice(1)}  
+**Affected Clauses:** ${factor.clauseRefs.join(', ')}  
+
+`;
+    });
+
+    analysis += `### Mitigation Priorities
+${riskAssessment.mitigationPriority.map((priority, index) => `${index + 1}. ${priority}`).join('\n')}
+
+`;
+  }
+
+  // Framework-specific scores
+  analysis += `## Regulatory Framework Performance
+
+`;
+  Object.entries(frameworkScores).forEach(([framework, data]) => {
+    const frameworkName = frameworkLabels[framework as keyof typeof frameworkLabels];
+    analysis += `### ${frameworkName}
+**Performance Score:** ${data.score}%  
+**Critical Failures:** ${data.criticalFailures}  
+**Total Gaps:** ${data.gaps}  
+**Recommendation:** ${data.recommendation}  
+
+`;
+  });
+
   analysis += `## Top Priority Gaps
 
-The following gaps represent the highest impact areas for improvement:
+The following gaps represent the highest impact areas for improvement (enhanced priority ranking):
 
-| Priority | Clause | Requirement | Impact | Suggested Evidence |
-|----------|--------|-------------|--------|-------------------|
+| Priority | Clause | Requirement | Impact | Risk Weight | Suggested Evidence |
+|----------|--------|-------------|--------|-------------|-------------------|
 `;
 
   gaps.forEach((gap, index) => {
     const priority = index + 1;
     const evidenceList = gap.suggestedEvidence.slice(0, 2).join(', ');
-    analysis += `| ${priority} | ${gap.clauseRef} | ${gap.clauseTitle} | ${gap.deficit.toFixed(1)} | ${evidenceList} |\n`;
+    analysis += `| ${priority} | ${gap.clauseRef} | ${gap.clauseTitle} | ${gap.deficit.toFixed(1)} | High | ${evidenceList} |\n`;
   });
 
   analysis += `
-## Gap Details
+## Detailed Gap Analysis
 
 `;
 
@@ -56,6 +115,7 @@ The following gaps represent the highest impact areas for improvement:
 
 **Question:** ${gap.prompt}  
 **Impact Score:** ${gap.deficit.toFixed(1)}  
+**Priority Ranking:** ${index + 1} of ${gaps.length}  
 
 **Required Evidence:**
 ${gap.suggestedEvidence.map(evidence => `- ${evidence}`).join('\n')}
@@ -65,6 +125,13 @@ ${gap.suggestedEvidence.map(evidence => `- ${evidence}`).join('\n')}
 - Implement systematic controls and monitoring
 - Train relevant personnel on requirements
 - Document all activities with objective evidence
+- Conduct periodic reviews and updates
+
+**Success Criteria:**
+- Documented procedure in place
+- Training completed and recorded
+- Objective evidence available
+- Process effectiveness demonstrated
 
 ---
 
@@ -318,7 +385,10 @@ export function createExportPackage(
     gapAnalysis: generateGapAnalysis(scoreResult, filterOptions),
     capaPlan: generateCapaPlan(scoreResult),
     interviewScript: generateInterviewScript(),
-    selectedFrameworks: filterOptions?.selectedFrameworks || []
+    selectedFrameworks: filterOptions?.selectedFrameworks || [],
+    weightedBreakdown: scoreResult.weightedBreakdown,
+    riskAssessment: scoreResult.riskAssessment,
+    frameworkScores: scoreResult.frameworkScores
   };
 }
 

@@ -13,12 +13,14 @@ import {
   ArrowClockwise,
   TrendUp,
   ClipboardText,
-  Users
+  Users,
+  Calculator
 } from '@phosphor-icons/react';
 import { AssessmentResponse, FilterOptions } from '../lib/types';
 import { calculateScore } from '../lib/scoring';
 import { createExportPackage, downloadExportPackage } from '../lib/export';
-import { frameworkLabels } from '../lib/data';
+import { frameworkLabels, getFilteredQuestions } from '../lib/data';
+import { ScoringExplanation } from './ScoringExplanation';
 import { toast } from 'sonner';
 
 interface ResultsPageProps {
@@ -29,6 +31,11 @@ interface ResultsPageProps {
 
 export function ResultsPage({ responses, onRestartAssessment, filterOptions }: ResultsPageProps) {
   const scoreResult = useMemo(() => calculateScore(responses, filterOptions), [responses, filterOptions]);
+  const assessmentQuestions = useMemo(() => {
+    return filterOptions 
+      ? getFilteredQuestions(filterOptions.selectedFrameworks, filterOptions.includeAllFrameworks)
+      : getFilteredQuestions([], true);
+  }, [filterOptions]);
   
   const statusConfig = {
     red: {
@@ -138,7 +145,7 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Questions Answered</span>
-                <span className="font-semibold">{responses.length} / 25</span>
+                <span className="font-semibold">{responses.length} / {assessmentQuestions.length}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Critical Failures</span>
@@ -150,12 +157,33 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
                 <span className="text-sm text-muted-foreground">Priority Gaps Identified</span>
                 <span className="font-semibold">{scoreResult.gaps.length}</span>
               </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Compliance Maturity</span>
+                <Badge variant="outline" className="capitalize">
+                  {scoreResult.riskAssessment.complianceMaturity}
+                </Badge>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Risk Level</span>
+                <Badge variant={scoreResult.riskAssessment.overallRisk === 'critical' || scoreResult.riskAssessment.overallRisk === 'high' ? 'destructive' : 
+                  scoreResult.riskAssessment.overallRisk === 'medium' ? 'secondary' : 'outline'} 
+                  className="capitalize">
+                  {scoreResult.riskAssessment.overallRisk}
+                </Badge>
+              </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Overall Compliance</span>
                   <span>{scoreResult.score}%</span>
                 </div>
                 <Progress value={scoreResult.score} className="h-2" />
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Weighted Performance</span>
+                  <span>{((scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100).toFixed(1)}%</span>
+                </div>
+                <Progress value={(scoreResult.weightedBreakdown.actualWeightedScore / scoreResult.weightedBreakdown.totalPossibleWeight) * 100} className="h-1" />
               </div>
             </CardContent>
           </Card>
@@ -187,10 +215,14 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
 
       {/* Detailed Results */}
       <Tabs defaultValue="gaps" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="gaps" className="flex items-center gap-2">
             <ClipboardText size={16} />
             Gap Analysis
+          </TabsTrigger>
+          <TabsTrigger value="scoring" className="flex items-center gap-2">
+            <Calculator size={16} />
+            Scoring Details
           </TabsTrigger>
           <TabsTrigger value="capa" className="flex items-center gap-2">
             <FileText size={16} />
@@ -207,7 +239,7 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
             <CardHeader>
               <CardTitle>Priority Compliance Gaps</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Top {scoreResult.gaps.length} areas requiring attention, ranked by impact
+                Top {scoreResult.gaps.length} areas requiring attention, ranked by enhanced impact scoring
               </p>
             </CardHeader>
             <CardContent>
@@ -265,6 +297,10 @@ export function ResultsPage({ responses, onRestartAssessment, filterOptions }: R
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="scoring" className="space-y-4">
+          <ScoringExplanation scoreResult={scoreResult} />
         </TabsContent>
 
         <TabsContent value="capa" className="space-y-4">

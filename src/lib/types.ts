@@ -30,6 +30,50 @@ export interface ScoreResult {
   status: 'red' | 'amber' | 'green';
   gaps: Gap[];
   criticalFailures: string[];
+  weightedBreakdown: WeightedBreakdown;
+  riskAssessment: RiskAssessment;
+  frameworkScores: Record<RegulatoryFramework, FrameworkScore>;
+}
+
+export interface WeightedBreakdown {
+  totalPossibleWeight: number;
+  actualWeightedScore: number;
+  weightingFactors: WeightingFactor[];
+  criticalImpact: number;
+}
+
+export interface WeightingFactor {
+  category: string;
+  weight: number;
+  maxScore: number;
+  actualScore: number;
+  performance: number; // percentage
+  clauseRefs: string[];
+}
+
+export interface RiskAssessment {
+  overallRisk: 'critical' | 'high' | 'medium' | 'low';
+  riskFactors: RiskFactor[];
+  mitigationPriority: string[];
+  complianceMaturity: 'basic' | 'developing' | 'advanced' | 'optimized';
+}
+
+export interface RiskFactor {
+  type: 'critical_failure' | 'high_weight_gap' | 'framework_weakness' | 'process_gap';
+  description: string;
+  impact: number;
+  likelihood: 'high' | 'medium' | 'low';
+  clauseRefs: string[];
+}
+
+export interface FrameworkScore {
+  framework: RegulatoryFramework;
+  score: number;
+  maxPossibleScore: number;
+  criticalFailures: number;
+  gaps: number;
+  performance: number; // percentage
+  recommendation: string;
 }
 
 export interface Gap {
@@ -51,6 +95,9 @@ export interface ExportData {
   capaPlan: string;
   interviewScript: string;
   selectedFrameworks: RegulatoryFramework[];
+  weightedBreakdown: WeightedBreakdown;
+  riskAssessment: RiskAssessment;
+  frameworkScores: Record<RegulatoryFramework, FrameworkScore>;
 }
 
 export interface FilterOptions {

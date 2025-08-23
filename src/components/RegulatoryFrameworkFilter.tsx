@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { RegulatoryFramework, FilterOptions } from '@/lib/types';
 import { frameworkLabels, frameworkDescriptions, getQuestionCountByFramework } from '@/lib/data';
-import { Filter, Info } from '@phosphor-icons/react';
+import { Funnel, Info } from '@phosphor-icons/react';
 
 interface RegulatoryFrameworkFilterProps {
   filterOptions: FilterOptions;
@@ -74,7 +74,7 @@ export function RegulatoryFrameworkFilter({
     <Card className={`${className}`}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Filter size={20} />
+          <Funnel size={20} />
           Focus Assessment on Specific Frameworks
         </CardTitle>
         <CardDescription>
