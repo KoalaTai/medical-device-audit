@@ -38,25 +38,11 @@ export function calculateTeamScore(
       }
     });
 
-    individualScores[member.id] = calculateScore(
-      memberResponses,
-      {
-        selectedFrameworks: frameworks,
-        includeAllFrameworks: false,
-        riskClassification
-      }
-    );
+    individualScores[member.id] = calculateScore(memberResponses);
   });
 
   // Calculate base team score using consensus responses
-  const baseScore = calculateScore(
-    assessmentResponses,
-    {
-      selectedFrameworks: frameworks,
-      includeAllFrameworks: false,
-      riskClassification
-    }
-  );
+  const baseScore = calculateScore(assessmentResponses);
 
   // Calculate consensus metrics
   const consensusMetrics = calculateConsensusMetrics(teamResponses, members);
@@ -88,11 +74,14 @@ export function calculateTeamScore(
     ...baseScore,
     individualScores,
     consensusMetrics,
+    teamMetrics: consensusMetrics,
+    dynamics: teamDynamics,
     teamDynamics,
     roleAnalysis,
     collaborationScore,
-    recommendedActions
-  };
+    recommendedActions,
+    recommendations: recommendedActions
+  } as TeamScoreResult;
 }
 
 function calculateConsensusMetrics(
@@ -222,8 +211,8 @@ function calculateRoleAnalysis(
     roleAnalysis[member.role] = {
       role: member.role,
       expectedStrengths: roleStrengths[member.role] || [],
-      actualPerformance: individualScore.score,
-      knowledgeGaps: individualScore.gaps.slice(0, 5),
+      actualPerformance: individualScore.overall_score,
+      knowledgeGaps: individualScore.top_gaps.slice(0, 5),
       contributionQuality: calculateContributionQuality(member, teamResponses),
       collaborationScore: calculateMemberCollaboration(member, teamResponses),
       recommendedTraining: roleTraining[member.role] || [],
@@ -281,7 +270,7 @@ function generateTeamRecommendations(
 
   // Low individual scores
   const lowPerformers = Object.values(individualScores)
-    .filter((score: any) => score.score < 70).length;
+    .filter((score: ScoringResult) => score.overall_score < 70).length;
   if (lowPerformers > 0) {
     recommendations.push({
       type: 'training',
@@ -347,17 +336,17 @@ function getDecisionMakingSpeed(teamResponses: Record<string, TeamResponse>): st
 
 function generateRoleInsights(
   role: TeamRole,
-  individualScore: any,
+  individualScore: ScoringResult,
   teamResponses: Record<string, TeamResponse>
 ): string[] {
   const insights: string[] = [];
   
-  if (individualScore.score < 70) {
+  if (individualScore.overall_score < 70) {
     insights.push(`Performance below expected level for ${role.replace('_', ' ')} role`);
   }
   
-  if (individualScore.criticalFailures.length > 0) {
-    insights.push(`${individualScore.criticalFailures.length} critical compliance areas need immediate attention`);
+  if (individualScore.critical_hit) {
+    insights.push(`Critical compliance areas need immediate attention`);
   }
   
   return insights;
